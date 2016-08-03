@@ -56,10 +56,11 @@ export default class PostSummary extends React.Component {
     }
 
     render() {
-        const {currentCategory, thumbSize, authorRepLog10} = this.props;
+        const {currentCategory, thumbSize, authorRepLog10, curationMode} = this.props;
         const {post, content, pending_payout, total_payout, cashout_time, netVoteSign} = this.props;
         if (!content) return null;
         const p = extractContent(immutableAccessor, content);
+
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
             desc = desc.replace(p.image_link, '')
@@ -67,6 +68,29 @@ export default class PostSummary extends React.Component {
         let title_text = p.title;
         let comments_link;
         let is_comment = false;
+
+        if (curationMode) {
+            // Post already paid out, hide it
+            if (total_payout !== "0.000 SBD") {
+                return null;
+            }
+
+            // Post is newer than X minutes, hide it
+            const creationDate = new Date(p.created).getTime();
+            const minutes = 10;
+            const now = new Date().getTime();
+            const timeCutoff = 1000 * 60 * minutes;
+            const timeBeforeCutoff = 1000 * 60 * 60 * 24 * 2;
+            if ((now - creationDate) <= timeCutoff || (now - creationDate) >= timeBeforeCutoff) {
+                return null;
+            }
+
+            // Post already has payout above X dollars, hide it
+            const dollarCutoff = 500;
+            if (parseFloat(p.pending_payout.split(" ")[0]) > dollarCutoff) {
+                return null;
+            }
+        }
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');

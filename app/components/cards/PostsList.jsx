@@ -88,11 +88,13 @@ class PostsList extends React.Component {
         const {comments} = this.props
         const {thumbSize} = this.state
 
+        let curationMode = true;
+
         if (!loading && !posts.length) {
             return <div>{emptyText}</div>;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
-            <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
+            <PostSummary curationMode={curationMode} post={item} currentCategory={category} thumbSize={thumbSize}
                 ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} />
         </li>)
         return (
