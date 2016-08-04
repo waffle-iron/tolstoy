@@ -53,6 +53,26 @@ export default class UserProfile extends React.Component {
         else {
             return <div><center>Unknown Account</center></div>
         }
+
+        let followerCount = 0, followingCount = 0;
+        const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
+        const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
+        let loadingFollowers = true, loadingFollowing = true;
+
+        if (followers && followers.has('result')) {
+            followerCount = followers.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            loadingFollowers = followers.get("loading");
+        }
+
+        if (following && following.has('result')) {
+            followingCount = following.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            loadingFollowing = following.get("loading");
+        }
+
         const isMyAccount = username === account.name
         let tab_content = null;
 
@@ -100,13 +120,25 @@ export default class UserProfile extends React.Component {
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
            }
-        } else if(!section  || section === 'blog') {
+        } else if(!section || section === 'blog') {
             if (account.blog) {
                 tab_content = <PostsList
                     emptyText={`Looks like ${account.name} hasn't started blogging yet!`}
                     posts={account.blog.filter(p => {
                         return !(p.indexOf("re-") === 0);
                     }).map(p => `${account.name}/${p}`)}
+                    loading={fetching}
+                    category="blog"
+                    loadMore={this.loadMore}
+                    showSpam />;
+            } else {
+                tab_content = (<center><LoadingIndicator type="circle" /></center>);
+            }
+        } else if(!section || section === 'feed') {
+            if (account.feed) {
+                tab_content = <PostsList
+                    emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
+                    posts={account.feed}
                     loading={fetching}
                     category="blog"
                     loadMore={this.loadMore}
@@ -166,6 +198,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
+                    <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feeds</Link></li>
                     <li><Link to={`/@${accountname}/curation-rewards`} activeClassName="active">Curation rewards</Link></li>
                     <li><Link to={`/@${accountname}/author-rewards`} activeClassName="active">Author rewards</Link></li>
                     <li><Link to={`/@${accountname}/transfers`} className={wallet_tab_active} activeClassName="active">Wallet</Link></li>
@@ -178,6 +211,7 @@ export default class UserProfile extends React.Component {
                 </ul>
             </div>}
          </div>;
+
         return (
             <div className="UserProfile">
 
@@ -191,9 +225,12 @@ export default class UserProfile extends React.Component {
                         </div>
                         <h2>{account.name}</h2>
 
-
                         <div>
-                            <p>{account.post_count} posts</p>
+                            <div className="UserProfile__stats">
+                                <span>{followerCount} followers</span>
+                                <span>{account.post_count} posts</span>
+                                <span>{followingCount} followed</span>
+                            </div>
                             <p style={{marginBottom: 5}}><span>{power_balance_str}</span></p>
                             <p><span>{steem_balance_str}</span> <span style={{paddingLeft: 10, paddingRight: 10}}>{sbd_balance_str}</span></p>
                         </div>
@@ -229,7 +266,7 @@ module.exports = {
                 current_user,
                 // current_account,
                 wifShown,
-                loading: state.app.get('loading'),
+                loading: state.app.get('loading')
             };
         },
         dispatch => ({

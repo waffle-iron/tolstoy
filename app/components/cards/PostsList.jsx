@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import PostSummary from 'app/components/cards/PostSummary';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import debounce from "lodash.debounce";
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -53,7 +54,8 @@ class PostsList extends React.Component {
         });
     }
 
-    scrollListener() {
+    scrollListener = debounce(() => {
+        console.log("scrollListener");
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
@@ -64,13 +66,13 @@ class PostsList extends React.Component {
         }
 
         // Detect if we're in mobile mode (renders larger preview imgs)
-        var mq = window.matchMedia('screen and (max-width: 39.9375em)')
+        var mq = window.matchMedia('screen and (max-width: 39.9375em)');
         if(mq.matches) {
             this.setState({thumbSize: 'mobile'})
         } else {
             this.setState({thumbSize: 'desktop'})
         }
-    }
+    }, 150)
 
     attachScrollListener() {
         window.addEventListener('scroll', this.scrollListener);
@@ -119,6 +121,10 @@ export default connect(
         const comments = []
         posts.forEach(item => {
             const content = state.global.get('content').get(item);
+            if(!content) {
+                console.error('PostsList --> Missing content key', content)
+                return
+            }
             let pending_payout = 0;
             // let total_payout = 0;
             let votes = Long.ZERO
@@ -135,7 +141,7 @@ export default connect(
             const username = current ? current.get('username') : null
             const ignore = !hasPendingPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', content.get('author')], List()).contains('ignore') : false
             const authorRepLog10 = repLog10(content.get('author_reputation'))
-            const hide = !hasPendingPayout && (ignore || authorRepLog10 <= -6)
+            const hide = !hasPendingPayout && (ignore || authorRepLog10 < 0) // rephide
             if(!hide || showSpam)
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
