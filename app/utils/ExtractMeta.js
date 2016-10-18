@@ -24,10 +24,10 @@ export default function extractMeta(chain_data, rp) {
         const content = chain_data.content[post];
         if (content) {
             const d = extractContent(objAccessor, content, false);
-            const url = 'https://golos.io' + d.link;
+            const url = 'http://localhost:3002' + d.link;
             const title = d.title + ' — Голос';
-            const image = d.image_link ? d.image_link : 'https://golos.io/images/golos-share.png';
-            const twimage = d.image_link ? d.image_link : 'https://golos.io/images/golos-twshare.png';
+            const image = d.image_link ? d.image_link : 'http://localhost:3002/images/golos-share.png';
+            const twimage = d.image_link ? d.image_link : 'http://localhost:3002/images/golos-twshare.png';
             metas.push({title});
             metas.push({canonical: url});
             metas.push({name: 'description', content: d.desc});

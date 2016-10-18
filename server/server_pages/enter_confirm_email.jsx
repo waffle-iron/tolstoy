@@ -115,6 +115,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         const recaptcha = this.request.body['g-recaptcha-response'];
         const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' + config.recaptcha.secret_key + '&response=' + recaptcha + '&remoteip=' + this.req.connection.remoteAddress;
         let captcha_failed;
+/* commented out capthcha for dev purposes
         try {
             const recaptcha_res = yield request(verificationUrl);
             const body = JSON.parse(recaptcha_res.body);
@@ -129,7 +130,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.redirect('/enter_email');
             return;
         }
-
+*/
         const confirmation_code = Math.random().toString(36).slice(2);
         let eid = yield models.Identity.findOne(
             {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
