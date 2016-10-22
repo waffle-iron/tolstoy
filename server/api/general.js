@@ -161,8 +161,6 @@ export default function useGeneralApi(app) {
                     print("acc doc", accountDoc, true);
                     print("account_name", accountDoc.name, true);
                     print("btc_address", address);
-
-
                     models.IcoAddress.create(escAttrs({
                         account_id: accountDoc.id,
                         account_name: accountDoc.name,

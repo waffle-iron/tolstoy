@@ -8,15 +8,18 @@ const stages = [25, 20, 15, 10, 5, 0]
 export default class LandingCountDowns extends React.Component {
 
 	static propTypes = {
+		prefill: PropTypes.bool,
 		crowdsaleEndAt: PropTypes.object,
-		crowdsaleStartAt: PropTypes.object.isRequired
+		blockchainStartAt: PropTypes.object,
+		crowdsaleStartAt: PropTypes.object.isRequired,
 	}
 
 	state = {
 		currentBonus: '',
 		nextBonus: '',
-		bitcoinsRaised: 0, //2000.45
-		crowdSaleIsActive: true,
+		bitcoinsRaised: 0,
+		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
+		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
 	}
 
 	componentDidMount() {
@@ -54,6 +57,18 @@ export default class LandingCountDowns extends React.Component {
 		return stages[5]
 	}
 
+	updateTime = () => {
+		this.setState({secondsSinceEpoch: this.state.secondsSinceEpoch + 1})
+	}
+
+	componentWillMount() {
+		if(process.env.BROWSER) this.updateTime = setInterval(this.updateTime, 1000);
+	}
+
+	componentWillUnmount() {
+		if(process.env.BROWSER) clearInterval(this.updateTime)
+	}
+
 	// TODO add this
 	// handleCrowdsaleStart = () => {}
 	// handleCrowdsaleEnd = () => {}
@@ -64,8 +79,26 @@ export default class LandingCountDowns extends React.Component {
 		const currentStage = this.dates.find((item) => item.bonus == this.calculateCurrentStage())
 		const previousStage = this.dates.find((item) => item.bonus < this.calculateCurrentStage())
 
+		function strSplice(str1, str2, location) {
+		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
+		}
+
+		function addCommas(number) {
+		  var returnvalue = number.toString();
+		  var length = returnvalue.length;
+		  var commas = Math.ceil(length / 3) - 1;
+		  for (var i = 1; i <= commas; i++) {
+		    returnvalue = strSplice(returnvalue, " ", (length - i * 3));
+		  }
+		  return returnvalue;
+		}
+
+		function calculateBlock(current_time) {
+		  return Math.round((current_time - (1476789457)) / 3);
+		}
+
 		return (
-			<section className="CountDowns">
+			<section className="CountDowns" id="CountDowns">
 				{/* HEADERS */}
 				<div className="CountDowns__headers">
 					<div className="row text-center">
@@ -83,23 +116,23 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* COUNTERS */}
 				{/* prefill means pre crowdsale start info */}
+				<div className="row CountDowns__blocks">
+					{/* number of blocks */}
+					<div className="small-12 columns">
+						<center>
+							<p>Текущий блок: {addCommas(calculateBlock(state.secondsSinceEpoch))}</p>
+						</center>
+					</div>
+				</div>
 				{
 					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown
-									title={<strong>До запуска блокчейна</strong>}
-									date={props.blockchainStartAt}
-									countFrom={props.blockchainStartAt.getTime()}
-								/>
-							</div>
-							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown
-									title={<strong>До старта продажи Силы Голоса</strong>}
-									date={props.crowdsaleStartAt}
-									countFrom={props.crowdsaleStartAt.getTime()}
-								/>
-							</div>
+							<CountDown
+								date={props.crowdsaleStartAt}
+								countFrom={props.crowdsaleStartAt.getTime()}
+								title={<strong>До старта продажи Силы Голоса</strong>}
+								className="small-12 medium-6 columns CountDowns__counter"
+							/>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 medium-4 columns CountDowns__counter">
@@ -107,6 +140,7 @@ export default class LandingCountDowns extends React.Component {
 									title="Продажа силы голоса закончится"
 									date={props.crowdsaleEndAt}
 									countFrom={props.crowdsaleEndAt.getTime() - props.crowdsaleStartAt.getTime()}
+									displayWhenZero
 								/>
 							</div>
 							<div className="small-12 medium-4 columns CountDowns__counter">
@@ -121,6 +155,7 @@ export default class LandingCountDowns extends React.Component {
 									title={`Бонус уменьшится: до ${state.nextBonus}%`}
 									date={currentStage.date}
 									countFrom={previousStage.date.getTime()}
+									displayWhenZero
 								/>
 							</div>
 						</div>

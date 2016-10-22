@@ -9,19 +9,25 @@ export default class CountDown extends React.Component {
 	static propTypes = {
 		title: PropTypes.node,
 		onEnd: PropTypes.func,
+		displayWhenZero: PropTypes.bool,
 		date: PropTypes.object.isRequired,
 	}
 
-	componentWillMount() {
-		this.setState ({ timeLeft: this.props.date.getTime() - Date.now() })
-  }
-
-
+	state = {
+		timeLeft: this.props.date ? this.props.date.getTime() - Date.now() : 0
+	}
 	// start timer on mount
 	// do not start timer while server-rendering to avoid errors
-	componentDidMount() { if (process.env.BROWSER) this.countDown() }
+	componentDidMount() { if (process.env.BROWSER) this.startCountDown() }
+
 	// && clear timer on unmount
-	componentWillUnmount() { if (this.interval) clearInterval(this.interval) }
+	componentWillUnmount() {
+		if (process.env.BROWSER) this.clearInterval()
+	}
+
+	// use extra method to clear interval because it will be called from various places,
+	// and refactoring will likely to brake something if used otherwise
+	clearInterval = () => { if (this.interval) clearInterval(this.interval)}
 
 	getDaysCount() {
 
@@ -29,21 +35,23 @@ export default class CountDown extends React.Component {
 		const lastDate = this.props.date;
 
 		const spanDays = (lastDate.getTime() - firstDate.getTime())/_ms_in_day;
-	  const diffDays = (currentDate - firstDate.getTime())/_ms_in_day; //
+		const diffDays = (currentDate - firstDate.getTime())/_ms_in_day; //
 		return diffDays/spanDays;
 	}
 
-	countDown() {
+	startCountDown() {
 		this.interval = setInterval(() => {
 			this.setState({ timeLeft: this.props.date.getTime() - Date.now() })
 		}, 1000)
 	}
 
 	render() {
-		if (!this.props.date) return null
+		const {date, onEnd, displayWhenZero} = this.props
+		if (!date) return null
+		// if (!this.state.timeLeft)
+		// this.setState({ timeLeft: this.props.date.getTime() - Date.now() })
+
 		// get values to display
-		if (!this.state.timeLeft)
-			this.setState({ timeLeft: this.props.date.getTime() - Date.now() })
 		const { timeLeft } = this.state
 		const seconds = (timeLeft-timeLeft%1000)/1000;
 		const minutes = (seconds - seconds%60)/60;
@@ -55,8 +63,12 @@ export default class CountDown extends React.Component {
 		const d = days;
 
 		if(timeLeft < 0) {
-			this.props.onEnd()
-			return <div>done</div>
+			// stop countdown
+			this.clearInterval()
+			// make callback if provided
+			if(onEnd == 'function') onEnd()
+			// hide component unless 'displayWhenZero' is specified
+			if(!displayWhenZero) return null
 		}
 
 		function renderCounter(valueInSeconds, description, percentageOf = 60) {
@@ -70,7 +82,7 @@ export default class CountDown extends React.Component {
 					</div>
 		}
 
-		return 	<section className="CountDown">
+		return 	<section className={"CountDown " + this.props.className}>
 					<p className="CountDown__title">{this.props.title}</p>
 					{renderCounter(days, 'Дни', this.getDaysCount())}
 					{renderCounter(h, 'Часы', 24)}

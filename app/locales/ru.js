@@ -182,7 +182,9 @@ const ru = {
 	recover_your_account: 'восстановить ваш аккаунт', // this probably will end with question mark
 	reset_usernames_password: "Сбросить пароль пользователя {username}",
 	this_will_update_usernames_authtype_key: 'Это обновит {username} {authType} ключ',
+
 	the_rules_of_APP_NAME: "Первое правило сети" + APP_NAME + ": не теряйте свой пароль. <br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль. <br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль. <br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен. <br /> Пятое правило: используйте только сгенерированные случайным образом пароли. <br /> Шестое правило: Никому не говорите свой пароль. <br /> Седьмое правило: Всегда надежно храните свой пароль.",
+
 	account_name: 'Имя аккаунта',
 	recover_password: 'Восстановить аккаунт',
 	current_password: 'Текущий пароль',
@@ -480,7 +482,7 @@ const ru = {
 	register_with_facebook: 'Регистрация с Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Или нажмите кнопку, чтобы зарегистрироваться с Facebook',
 	trending_24_hour: 'популярное (24 часа)',
-	home: 'лента',
+	home: 'Лента',
 	'24_hour': '24 часа',
 	'30_day': '30 дней',
 	flag: "Голосовать против",
@@ -529,6 +531,9 @@ const ru = {
 	account_name_should_be_longer: 'Имя аккаунта должно быть длиннее.',
 	account_name_should_be_shorter: 'Имя аккаунта должно быть короче.',
 	account_name_should_start_with_a_letter: 'Имя аккаунта должно начинаться с буквы.',
+	account_name_should_have_only_letters_digits_or_dashes: 'Имя аккаунта должно должно состоять только из букв, цифр или дефисов.',
+	choose_language: 'Выберите язык',
+	choose_currency: 'Выберите валюту',
 }
 
 export { ru }
