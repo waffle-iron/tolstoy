@@ -32,10 +32,10 @@ const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
-session(app);
-app.use(csrf());
-// DBG app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
-// DBG csrf(app);
+//session(app);
+//app.use(csrf());
+ app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
+ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
@@ -52,7 +52,7 @@ app.use(function *(next) {
 
         this.session.csrf = this.csrf;
         console.log(this.session.csrf);
-        console.log("---- debugging csrf")
+        console.log("---- debugging ")
       }
     }
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
