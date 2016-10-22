@@ -32,10 +32,8 @@ const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
-//session(app);
-//app.use(csrf());
- app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
- csrf(app);
+app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
+csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
@@ -47,14 +45,10 @@ app.use(function *(next) {
         this.redirect('/ico'); // LANDING this.redirect(`/@${this.session.a}/feed`);
         return;
     }
-    if (this.csrf) {
-      if (this.session && !this.session.csrf) {
-
-        this.session.csrf = this.csrf;
-        console.log(this.session.csrf);
-        console.log("---- debugging ")
-      }
-    }
+    if (this.session) {
+console.log(this.session.secret)
+console.log("---")
+}
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');
