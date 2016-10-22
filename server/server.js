@@ -32,8 +32,8 @@ const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
-app.use(session(app, {maxAge: 1000 * 3600 * 24 * 7}, ));
-app.use(csrf(app));
+app.use(session(app, {maxAge: 1000 * 3600 * 24 * 7}));
+app.use(csrf());
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
