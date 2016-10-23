@@ -43,7 +43,9 @@ function checkCSRF(ctx, csrf) {
         ctx.status = 403;
         ctx.body = 'invalid csrf token';
         console.log('-- invalid csrf token -->', ctx.request.method, ctx.request.url, ctx.session.uid);
-        console.log(e)
+        console.log(e);
+        console.log(ctx);
+        console.log('--------')
         return false;
     }
     return true;

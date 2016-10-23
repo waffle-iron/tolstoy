@@ -45,10 +45,6 @@ app.use(function *(next) {
         this.redirect('/ico'); // LANDING this.redirect(`/@${this.session.a}/feed`);
         return;
     }
-    if (this.session) {
-console.log(this.session.secret)
-console.log("---")
-}
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');
