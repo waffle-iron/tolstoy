@@ -12,7 +12,9 @@ const en = 	{
 	market: "Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
+	steemit_api_docs: "Steemit API Docs",
 	APP_NAME_chat: APP_NAME + " Chat",
+	steemit_chat: "Steemit Chat",
 	witnesses: "Witnesses",
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
@@ -545,6 +547,8 @@ const en = 	{
 	add_image_url: 'Add image url',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
+	draft_saved: 'Draft saved',
+	markdown_styling_guide: 'Markdown Styling Guide',
 }
 
 export { en }

@@ -12,6 +12,16 @@
 
 li.Header__userpic {
     padding: 0;
+    position: relative;
+}
+
+.TopRightMenu__notificounter {
+    position: absolute;
+    top: 4px;
+    right: 0;
+    > .NotifiCounter {
+        display: block;
+    }
 }
 
 li.buttons {

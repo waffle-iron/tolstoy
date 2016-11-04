@@ -169,9 +169,16 @@ class Voting extends React.Component {
 
         const payoutItems = [
 
-            {value: translate('potential_payout') + ' ' + localizedCurrency(formatDecimal(pending_payout).join(''))},
-            // after merging update
-            {value: translate('boost_payments') + ' ' + localizedCurrency(formatDecimal(promoted).join(''))}
+        if(cashout_active) {
+            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
+        }
+        if(promoted > 0) {
+            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
+        }
+        const hide_cashout_532 = cashout_time.indexOf('1969') === 0 // tmpfix for #532
+        if (cashout_active && !hide_cashout_532) {
+            payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
+        }
 
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {

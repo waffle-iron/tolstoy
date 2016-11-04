@@ -36,7 +36,7 @@ class UserWallet extends React.Component {
             analytics.track(eventType)
         }
     }
-    render() {
+    render() {Â
         const {state: {showDeposit, depositType, toggleDivestError}, onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
         const {convertToSteem, price_per_steem} = this.props
         let account          = this.props.account;
@@ -148,7 +148,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos dropdown in user\'s profile clicked')} selected={<span className="uppercase">{steem_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' ' + OWNERSHIP_TOKEN} menu={steem_menu} />
                     : steem_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
@@ -165,7 +165,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos power dropdown in user\'s profile clicked')} selected={<span className="uppercase">{power_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' ' + OWNERSHIP_TOKEN} menu={power_menu} />
                     : power_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
@@ -177,8 +177,22 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'gbg dropdown in user\'s profile clicked')} selected={sbd_balance_str} items={dollar_menu} el="span" />
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
                     : sbd_balance_str}
+                </div>
+            </div>
+            <div className="UserWallet__balance row">
+                <div className="column small-12 medium-8">
+                    SAVINGS<br /><span className="secondary">{savingsTip}</span>
+                </div>
+                <div className="column small-12 medium-4">
+                    {isMyAccount ?
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={savings_balance_str} menu={savings_menu} />
+                    : savings_balance_str}
+                    <br />
+                    {isMyAccount ?
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance_str} menu={savings_sbd_menu} />
+                    : savings_sbd_balance_str}
                 </div>
             </div>
             <div className="row">

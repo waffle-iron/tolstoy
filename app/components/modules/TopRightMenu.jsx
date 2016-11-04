@@ -11,6 +11,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { translate } from 'app/Translator';
+import NotifiCounter from 'app/components/elements/NotifiCounter';
 
 const defaultNavigate = (e) => {
     e.preventDefault();
@@ -39,14 +40,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: translate('feed')},
+            {link: feed_link, value: translate('feed'), addon: <NotifiCounter fields="feed" />},
             {link: account_link, value: translate('blog')},
-            {link: posts_link, value: translate('comments')},
-            {link: replies_link, value: translate('replies')},
-            {link: wallet_link, value: translate('wallet')},
+            {link: comments_link, value: translate('comments')},
+            {link: replies_link, value: translate('replies'), addon: <NotifiCounter fields="comment_reply" />},
+            {link: wallet_link, value: translate('wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, value: translate('change_password')},
-            {link: crowdsale_link, value: translate('crowdsale')},
-            {link: settings_link, value: translate('settings')},
             loggedIn ?
                 {link: '#', onClick: logout, value: translate('logout')} :
                 {link: '#', onClick: showLogin, value: translate('login')}
@@ -145,6 +144,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
                             <Userpic account={username} width="36" height="36" />
                         </a>
+                        <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>

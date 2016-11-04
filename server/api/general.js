@@ -239,10 +239,8 @@ export default function useGeneralApi(app) {
                 status: 'ok'
             });
         } catch (error) {
-            console.error('Error in /login_account api call', this.session.uid, error);
-            this.body = JSON.stringify({
-                error: error.message
-            });
+            console.error('Error in /login_account api call', this.session.uid, error.message);
+            this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
         recordWebEvent(this, 'api/login_account', account);
@@ -287,10 +285,8 @@ export default function useGeneralApi(app) {
             });
             recordWebEvent(this, type, str_value);
         } catch (error) {
-            console.error('Error in /record_event api call', error);
-            this.body = JSON.stringify({
-                error: error.message
-            });
+            console.error('Error in /record_event api call', error.message);
+            this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
     });

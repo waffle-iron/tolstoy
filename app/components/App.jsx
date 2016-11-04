@@ -58,7 +58,6 @@ class App extends React.Component {
         const p = this.props;
         const n = nextProps;
         return p.location !== n.location ||
-                  p.loading !== n.loading ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -141,7 +140,7 @@ class App extends React.Component {
         }
 
         let welcome_screen = null;
-        if (new_visitor && this.state.showBanner
+        if (ip && new_visitor && this.state.showBanner
                   && !/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)  // LANDING
             ) {
             welcome_screen = (
@@ -166,89 +165,86 @@ class App extends React.Component {
             );
         }
 
-        let header_bar = null
-        // if (!/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)) {
-        if (location.pathname.indexOf("/ico")) {
-          header_bar = (
-          <div>
-
-          <SidePanel ref="side_panel" alignment="right">
-              <TopRightMenu vertical navigate={this.navigate} />
-              <ul className="vertical menu">
-                  <li>
-                      <a href={LANDING_PAGE_URL} onClick={this.navigate}>
-                          {translate("about")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/tags.html/hot" onClick={this.navigate}>
-                          {translate("explore")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href={WHITEPAPER_URL} onClick={this.navigate}>
-                          {translate("APP_NAME_whitepaper")}
-                      </a>
-                  </li>
-                  {/* <li>
-                      <a onClick={() => depositSteem()}>
-                          {translate("buy_OWNERSHIP_TOKEN")}
-                      </a>
-                  </li> */}
-                  <li>
-                      <a href="/market" onClick={this.navigate}>
-                          {translate("market")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/recover_account_step_1" onClick={this.navigate}>
-                      {translate("stolen_account_recovery")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/change_password" onClick={this.navigate}>
-                          {translate("change_account_password")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://chat.golos.io" target="_blank">
-                          {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
-                      </a>
-                  </li>
-                  <li className="last">
-                      <a href="/~witnesses" onClick={this.navigate}>
-                          {translate("witnesses")}
-                      </a>
-                  </li>
-              </ul>
-              <ul className="vertical menu">
-                  <li>
-                      <a href="/legal/terms_of_service.pdf" onClick={this.navigate} rel="nofollow">
-                          {translate("privacy_policy")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" onClick={this.navigate} rel="nofollow">
-                          {translate("terms_of_service")}
-                      </a>
-                  </li>
-              </ul>
-          </SidePanel>
-          <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /></div>);
-        }
-        else {
-            header_bar = (
-                <div>
-                    <SidePanel ref="side_panel" alignment="right">
-                        <TopRightMenu vertical navigate={this.navigate} />
-                    </SidePanel>
-                    <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
-                </div>
-            );
-        }
-
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
-                {header_bar}
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+                    onMouseMove={this.onEntropyEvent}>
+            <SidePanel ref="side_panel" alignment="right">
+                <TopRightMenu vertical navigate={this.navigate} />
+                <ul className="vertical menu">
+                    <li>
+                        <a href="https://steem.io" onClick={this.navigate}>
+                            {translate("about")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tags.html/hot" onClick={this.navigate}>
+                            {translate("explore")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                            {translate("whitepaper")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/faq.html" onClick={this.navigate}>
+                            FAQ
+                        </a>
+                    </li>
+                    <li>
+                        <a onClick={() => depositSteem()}>
+                            {translate("buy_steem")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://steemtools.com/" onClick={this.navigate}>
+                            {translate('steem_app_center')}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/market" onClick={this.navigate}>
+                            {translate("market")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/recover_account_step_1" onClick={this.navigate}>
+                        {translate("stolen_account_recovery")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/change_password" onClick={this.navigate}>
+                            {translate("change_account_password")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                            {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                            {translate("steemit_api_docs")}
+                        </a>
+                    </li>
+                    <li className="last">
+                        <a href="/~witnesses" onClick={this.navigate}>
+                            {translate("witnesses")}
+                        </a>
+                    </li>
+                </ul>
+                <ul className="vertical menu">
+                    <li>
+                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                            {translate("privacy_policy")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                            {translate("terms_of_service")}
+                        </a>
+                    </li>
+                </ul>
+            </SidePanel>
+            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}
@@ -256,7 +252,6 @@ class App extends React.Component {
                 {lp ? <LpFooter /> : null}
 
             </div>
-            <div style={{color: '#00ff00',position: 'fixed', bottom: '1px', left: '3px', fontSize: '70%'}}>git client# {githash} </div>
             <Dialogs />
             <Modals />
         </div>
