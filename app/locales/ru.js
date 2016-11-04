@@ -34,7 +34,6 @@ const ru = {
 	when_you_link_text: 'зарегистрируйтесь',
 	and_vote_for_it: 'и проголосуйте за пост',
 	// post_promo_text: "Авторы получают вознаграждение, когда пользователи голосуют за их посты<br />Проголосовавшие также вознаграждаются. Если вам понравилось, то что вы прочитали здесь, заработайте {amount} в " + INVEST_TOKEN + "<br />. Для этого  {link} и проголосуете за пост.",
-	post_promo_text_link: '',
 	read_only_mode: 'Из-за технического обслуживания сервера мы работаем в режиме чтения. Извините за неудобство.',
 	membership_invitation_only: 'Стать пользователем Голоса сейчас возможно только по приглашению. Попросите ваших знакомых о приглашении', // желающих зарегистрироваться ?
 	submit_email_to_get_on_waiting_list: 'Добавьте ваш адрес электронной почты, чтобы попасть в список ожидания',
@@ -167,8 +166,8 @@ const ru = {
 	transfer_amount_to: "Перевод {amount} на счёт",
 	recieve_amount_from: "Получено {amount} от",
 	transfer_amount_from: "Перевод {amount} со счёта",
-  transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
-	stop_power_down: "Остабление Силы Голоса остановлено",
+	transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
+	stop_power_down: "Ослабление Силы Голоса остановлено",
 	start_power_down_of: "Ослабление Силы Голоса начато с",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + INVEST_TOKEN + ' за',
 	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + INVEST_TOKEN + ' за',
@@ -182,9 +181,7 @@ const ru = {
 	recover_your_account: 'восстановить ваш аккаунт', // this probably will end with question mark
 	reset_usernames_password: "Сбросить пароль пользователя {username}",
 	this_will_update_usernames_authtype_key: 'Это обновит {username} {authType} ключ',
-
-	the_rules_of_APP_NAME: "Первое правило сети" + APP_NAME + ": не теряйте свой пароль. <br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль. <br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль. <br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен. <br /> Пятое правило: используйте только сгенерированные случайным образом пароли. <br /> Шестое правило: Никому не говорите свой пароль. <br /> Седьмое правило: Всегда надежно храните свой пароль.",
-
+	the_rules_of_APP_NAME: "Первое правило сети " + APP_NAME + ": не теряйте свой пароль. <br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль. <br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль. <br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен. <br /> Пятое правило: используйте только сгенерированные случайным образом пароли. <br /> Шестое правило: Никому не говорите свой пароль. <br /> Седьмое правило: Всегда надежно храните свой пароль.",
 	account_name: 'Имя аккаунта',
 	recover_password: 'Восстановить аккаунт',
 	current_password: 'Текущий пароль',
@@ -193,7 +190,7 @@ const ru = {
 	recover_account: 'Восстановить аккаунт',
 	new: 'Новое', // ex. 'Generated Password (new)', but not exclusively
 	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
-	click_to_generate_password: 'Нажмите чтобы сгененировать пароль',
+	click_to_generate_password: 'Нажмите, чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',
 	understand_that_APP_NAME_cannot_recover_password: 'Я понимаю что ' + APP_NAME + ' не сможет восстановить утраченный пароль',
 	i_saved_password: 'Я надежно сохранил сгенерированный пароль',
@@ -225,7 +222,7 @@ const ru = {
 	login_to_see_memo: 'войти чтобы увидеть заметку',
 	post: 'Пост', // places used: tooltip in MediumEditor
 	unknown: 'Неизвестный', // exp.: 'unknown error'
-	account_name_is_not_available: 'Имя аккаунта не доступно',
+	account_name_is_not_available: 'Имя аккаунта недоступно',
 	type: 'Тип',
 	price: 'Цена',
 	// Market.jsx
@@ -364,7 +361,6 @@ const ru = {
 	couldnt_create_account_server_returned_error: "Не получилось создать аккаунт. Сервер вернул эту ошибку",
 	form_requires_javascript_to_be_enabled: 'Эта форма требует активированный в браузере javascript',
 	our_records_indicate_you_already_have_account: 'Наши записи показывают что у вас уже есть ' + APP_NAME + ' аккант',
-	// TODO
 	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
 	// next 3 blocks are meant to be used together
 	you_can_either: 'Вы можете или', // context 'you can either login'
@@ -491,9 +487,9 @@ const ru = {
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
 	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ', этот процесс называется "усиление голоса".',
 	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + OWNERSHIP_TOKEN + '.',
-	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличевается при долгосрочном хранении.',
+	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'Оценочная стоимость расчитывается из 7-ми дневной средней стоимости ' + OWNERSHIP_TOKEN + '.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + OWNERSHIP_TOKEN + '.',
 	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + OWNERSHIP_TOKEN + '.',
 	// TODO
 	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + OWNERSHIP_TOKEN + '.',
@@ -536,7 +532,36 @@ const ru = {
 	choose_currency: 'Выберите валюту',
 	crowdsale: 'Краудсейл',
 	followers: 'Подписчики',
+	// errors
+	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
+	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Только один Голос аккаунт разрешен с одного IP адреса каждые десять минут',
+	// enter_confirm_email.jsx
+	thank_you_for_providing_your_email_address: 'Благодарим вас за предоставление вашей электронной почты',
+	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продолжения, кликните ссылку в письме, которое мы вам прислали',
+	user_not_found: 'пользователь не найден',
+	please_provide_your_email_address_to_continue_the_registration_process: 'Пожалуйста, укажите адрес вашей электронной почты чтобы продолжить процесс регистрации',
+	this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised: 'Эта информация позволяет Голосу помочь вам восстановить аккаунт, если он когда-нибудь будет украден',
+	email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience: 'Адрес электронной почты на данный момент не может быть изменен, извините за неудобства',
+	continue: 'продолжить',
+	email_address: 'Адрес электронной почты',
+	please_prove_an_email_address: 'Пожалуйста укажите адрес электронной почты',
+	failed_captcha_verification_please_try_again: 'Ошибка проверки капчи, попробуйте еще раз',
+	re_send_email: 'Повторная отправка электронной почты',
+	email_confirmation: 'Подтверждение электронной почты',
+	// next 3 strings are used together
+	by_verifying_you_agree_with: 'Подтверждая ваш аккаунт вы соглашаетесь с',
+	by_verifying_you_agree_with_privacy_policy: 'Политикой Конфиденциальности',
+	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'сайта ' + APP_URL,
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Голосование возможно только в первые 24 часа с момента публикации',
+	unverified_transactions: `{transactionsCount, plural,
+		zero {0 неподтвержденных транзакций}
+		one {# неподтвержденную транзакцию}
+		few {# неподтвержденныe транзакции}
+		many {# неподтвержденных транзакций}
+	}`,
+	add_image_url: 'Добавьте url вашего изображения',
+	saved: 'Сохранено',
+	server_returned_error: 'ошибка сервера',
 }
 
 export { ru }

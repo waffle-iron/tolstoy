@@ -30,11 +30,13 @@ function createDate(year, month, day, hours, minutes) {
 	return date
 }
 
-const blockchainStartAt = createDate(2016, 9, 18, 11, 0)
-const crowdsaleStartAt = createDate(2016, 10, 1, 11, 0)
-const crowdsaleEndAt = createDate(2016, 11, 1, 11, 0)
+export const blockchainStartAt = createDate(2016, 9, 18, 11, 0)
+export const crowdsaleStartAt = createDate(2016, 10, 1, 11, 0)
+export const crowdsaleEndAt = createDate(2016, 11, 4, 11, 0)
 
 class Landing extends React.Component {
+
+	componentWillMount() { if (process.env.BROWSER) document.title = 'Голос - ICO' }
 
 	componentDidMount() { if (process.env.BROWSER && WOW) new WOW().init() }
 
@@ -44,6 +46,7 @@ class Landing extends React.Component {
 		const buyGolosButton = <a href={buyGolosLink} className="button Landing__button_big BuyGolosButton">Купи <strong>Силу Голоса</strong></a>
 		// TODO move this constant into <CountDowns />
 		const prefill = crowdsaleStartAt > Date.now()
+
         return (
             <div className="Landing text-center">
 				<CountDowns

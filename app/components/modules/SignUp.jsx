@@ -98,17 +98,13 @@ class SignUp extends React.Component {
             </div>*/}
             <div className="row">
                 <div className="column">
-                      <br />
-                <i>Возможность регистрации через Facebook и другие социальные ожидается в ближайшее время.</i>
-            </div></div>
-            <div className="row">
-                <div className="column">
                     <br />
                     <p className="secondary">
-                        {translate("by_verifying_you_agree")}
-                        {' '}<a href="/legal/privacy_policy.pdf" target="_blank">
-                                {translate("by_verifying_you_agree_terms_and_conditions")}
-                            </a>.
+                        {translate('by_verifying_you_agree_with') + ' '}
+                        <a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" target="_blank">
+                            {translate('by_verifying_you_agree_with_privacy_policy')}
+                        </a>
+                        {' ' + translate('by_verifying_you_agree_with_privacy_policy_of_website_APP_URL')}.
                     </p>
                 </div>
             </div>
