@@ -63,8 +63,6 @@ export default class Reblog extends React.Component {
     }
 
     render() {
-        // reblog functionality is currently not working
-        return null
         if(this.props.author == this.props.account) return null;
 
         const state = this.state.active ? 'active' : 'inactive'
