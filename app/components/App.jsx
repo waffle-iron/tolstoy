@@ -24,7 +24,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
-        this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
+        //this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -62,13 +62,13 @@ class App extends React.Component {
                   p.flash !== n.flash || this.state !== nextState;
     }
 
-    toggleOffCanvasMenu(e) {
+    /*toggleOffCanvasMenu(e) {
         e.preventDefault();
         // this.setState({open: this.state.open ? null : 'left'});
         this.refs.side_panel.show();
         console.log('sidebar menu toggled')
         analytics.track('sidebar menu toggled')
-    }
+    }*/
 
     handleClose = () => this.setState({open: null});
 
