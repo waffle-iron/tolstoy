@@ -188,6 +188,36 @@ class Settings extends React.Component {
                                     <input type="submit" className="button" value={translate('save_avatar')} />
                                 </p>
                             </form>
+                            <form onSubmit={this.handleUserAboutSubmit}>
+                                <label>{translate('add_about')}
+                                    <input type="text" onChange={this.handleUserAboutChange} value={state.userAbout} disabled={!props.isOwnAccount || state.loading} required />
+                                    {
+                                        state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.succesMessage
+                                        ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                        : null
+                                    }
+                                </label>
+                                <p className="text-center" style={{marginTop: 16.8}}>
+                                    <input type="submit" className="button" value={translate('save_about')} />
+                                </p>
+                            </form>
+                            <form onSubmit={this.handleUserBlogchainSubmit}>
+                                <label>{translate('add_blogchain')}
+                                    <input type="text" onChange={this.handleUserBlogchainChange} value={state.userBlogchain} disabled={!props.isOwnAccount || state.loading} required />
+                                    {
+                                        state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.succesMessage
+                                        ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                        : null
+                                    }
+                                </label>
+                                <p className="text-center" style={{marginTop: 16.8}}>
+                                    <input type="submit" className="button" value={translate('save_blogchain')} />
+                                </p>
+                            </form>
                         </div>
                         <div className="small-12 medium-6 large-8 columns text-center">
                             {
@@ -196,34 +226,6 @@ class Settings extends React.Component {
                                 : null
                             }
                         </div>
-                    </div>
-                    <div className="row">
-                        <form onSubmit={this.handleUserAboutSubmit} className="small-12 medium-6 large-4 columns">
-                            <label>{translate('add_about')}
-                                <input type="string" onChange={this.handleUserAboutChange} value={state.userAbout} disabled={!props.isOwnAccount || state.loading} required />
-                                {
-                                    state.errorMessage
-                                    ? <small className="error">{state.errorMessage}</small>
-                                    : state.succesMessage
-                                    ? <small className="success text-uppercase">{state.succesMessage}</small>
-                                    : null
-                                }
-                            </label>
-                        </form>
-                    </div>
-                    <div className="row">
-                        <form onSubmit={this.handleUserBlogchainSubmit} className="small-12 medium-6 large-4 columns">
-                            <label>{translate('add_blogchain')}
-                                <input type="string" onChange={this.handleUserBlogchainChange} value={state.userBlogchain} disabled={!props.isOwnAccount || state.loading} required />
-                                {
-                                    state.errorMessage
-                                    ? <small className="error">{state.errorMessage}</small>
-                                    : state.succesMessage
-                                    ? <small className="success text-uppercase">{state.succesMessage}</small>
-                                    : null
-                                }
-                            </label>
-                        </form>
                     </div>
                 </div>
     }

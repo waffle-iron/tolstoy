@@ -549,6 +549,8 @@ const en = 	{
 	server_returned_error: 'server returned error',
 	user_avatar: 'user\'s avatar',
 	save_avatar: 'save avatar',
+	save_about: 'save about',
+	save_blogchain: 'save blogchain',
 	wiki: 'Wiki',
 	comment_is_nested_5_posts_deep: 'Comment is nested 5 posts deep, maximum depth is 5',
 	you_may_only_comment_once_every_20_seconds: 'You may only comment once every 20 seconds',
