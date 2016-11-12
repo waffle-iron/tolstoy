@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
+import { Link } from 'react-scroll';
 import React from 'react';
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon';
 import user from 'app/redux/User';
@@ -51,88 +52,13 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 {link: '#', onClick: showLogin, value: translate('login')}
         ];
         const search = translate('search')
-        if (location && location.pathname.indexOf("/ico") != -1) {
-            return (
-                <ul className={mcn + ' landing'}>
-                    <li className={lcn + ' buttons'}>
-                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li>
-                    <li className={lcn}>
-                        <a className="button success" href="#CountDowns">Краудсейл</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#what-is-golos">Видео</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#docs">Документация</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#faq">FAQ</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#team">Команда</a>
-                    </li>
-                    <LinkWithDropdown
-                        closeOnClickOutside
-                        dropdownPosition="bottom"
-                        dropdownAlignment="right"
-                        dropdownContent={<VerticalMenu items={user_menu} title={username} />}
-                        onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
-                    >
-                        {!vertical && <li className={'Header__userpic '}>
-                            <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                                <Userpic account={username} width="36" height="36" />
-                            </a>
-                        </li>}
-                    </LinkWithDropdown>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
-                </ul>
-            );
-            return      <ul className={mcn + mcl + ' landing'}>
-                            <li className={lcn + ' buttons'}>
-                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#what-is-golos">Видео</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">Документация</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">Команда</a>
-                            </li>
-                            <li className={lcn + ' image-wrapper'}>
-                                <a href="/login.html">
-                                    <img src="images/user.png" width="36" height="36" />
-                                    <span>Вход</span>
-                                </a>
-                            </li>
-                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
-                        </ul>
-        }
-
 /*
                 <li><a href={`/@${username}/transfers#buy_golos`} className="button alert">купить голоса</a></li>
                    move down on ICO start....
 */
         return (
             <ul className={mcn}>
-                <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>
-                <li className={lcn + ' buttons'}>
-                    <a href="/ico" className="button success">Краудсейл</a>
-                </li>
-                {/* search is currently unavailable */}
-                {/* <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li> */}
+                <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -154,49 +80,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     if (probablyLoggedIn) {
-        if (location && location.pathname.indexOf("/ico") != -1) {
-            return      <ul className={mcn + mcl + ' landing'}>
-                            <li className={lcn + ' buttons'}>
-                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li>
-                            <li className={lcn}>
-                                <a className="button success" href="#CountDowns">Краудсейл</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#what-is-golos">Видео</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">Документация</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">Команда</a>
-                            </li>
-                            <li className={lcn + ' image-wrapper'}>
-                                <a href="/login.html">
-                                    <img src="images/user.png" width="36" height="36" />
-                                    <span>Вход</span>
-                                </a>
-                            </li>
-                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
-                        </ul>
-        }
-
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>
-                <li className={lcn + ' buttons'}>
-                    <a href={`/ico`} className="button success">Краудсейл</a>
-                </li>
-                {/* search is currently unavailable */}
-                {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}
+                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -205,48 +91,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
 
-    if (location && location.pathname.indexOf("/ico") != -1) {
-        return  <ul className={mcn + mcl + ' landing'}>
-                    <li className={lcn + ' buttons'}>
-                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li>
-                    <li className={lcn}>
-                        <a className="button success" href="#CountDowns">Краудсейл</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#what-is-golos">Видео</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#docs">Документация</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#faq">FAQ</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#team">Команда</a>
-                    </li>
-                    <li className={lcn + ' image-wrapper'}>
-                        <a href="/login.html">
-                            <img src="images/user.png" width="36" height="36" />
-                            <span>Вход</span>
-                        </a>
-                    </li>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
-                </ul>
-    }
     return (
             <ul className={mcn + mcl}>
-                <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>
-                <li className={lcn + ' buttons'}>
-                    <a href={`/ico`} className="button success">Краудсейл</a>
-                </li>
-                {/* search is currently unavailable */}
-                {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}
-                <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
+                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
                 {submit_story}
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
