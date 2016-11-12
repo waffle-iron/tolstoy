@@ -543,6 +543,8 @@ const en = 	{
 	by_verifying_you_agree_with_privacy_policy: 'Privacy Policy',
 	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'of ' + APP_URL,
 	add_image_url: 'Add image url',
+	add_blogchain: 'Add information about your blogchain',
+	add_about: 'Add information about you',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
 }

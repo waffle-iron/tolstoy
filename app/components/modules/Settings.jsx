@@ -13,6 +13,8 @@ class Settings extends React.Component {
         errorMessage: '',
         succesMessage: '',
         userImage: this.props.userImage || '',
+        userBlogchain: this.props.userBlogchain || '',
+        userAbout: this.props.userAbout || '',
     }
 
     handleCurrencyChange(event) { store.set('currency', event.target.value) }
@@ -27,6 +29,14 @@ class Settings extends React.Component {
         this.setState({userImage: event.target.value})
     }
 
+    handleUserBlogchainChange = event => {
+        this.setState({userBlogchain: event.target.value})
+    }
+
+    handleUserAboutChange = event => {
+        this.setState({userAbout: event.target.value})
+    }
+
     handleUserImageSubmit = event => {
         event.preventDefault()
         this.setState({loading: true})
@@ -37,6 +47,80 @@ class Settings extends React.Component {
         if (!metaData) metaData = {}
         if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
         metaData.user_image = this.state.userImage
+        metaData = JSON.stringify(metaData);
+
+        updateAccount({
+            json_metadata: metaData,
+            account: account.name,
+            memo_key: account.memo_key,
+            errorCallback: () => {
+                console.log('SUCCES')
+                this.setState({
+                    loading: false,
+                    errorMessage: translate('server_returned_error')
+                })
+            },
+            successCallback: () => {
+                console.log('SUCCES')
+                // clear form ad show succesMessage
+                this.setState({
+                    loading: false,
+                    errorMessage: '',
+                    succesMessage: translate('saved') + '!',
+                })
+                // remove succesMessage after a while
+                setTimeout(() => this.setState({succesMessage: ''}), 2000)
+            }
+        })
+    }
+
+    handleUserBlogchainSubmit = event => {
+        event.preventDefault()
+        this.setState({loading: true})
+
+        const {account, updateAccount} = this.props
+        let {metaData} = this.props
+
+        if (!metaData) metaData = {}
+        if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
+        metaData.user_blogchain = this.state.userBlogchain
+        metaData = JSON.stringify(metaData);
+
+        updateAccount({
+            json_metadata: metaData,
+            account: account.name,
+            memo_key: account.memo_key,
+            errorCallback: () => {
+                console.log('SUCCES')
+                this.setState({
+                    loading: false,
+                    errorMessage: translate('server_returned_error')
+                })
+            },
+            successCallback: () => {
+                console.log('SUCCES')
+                // clear form ad show succesMessage
+                this.setState({
+                    loading: false,
+                    errorMessage: '',
+                    succesMessage: translate('saved') + '!',
+                })
+                // remove succesMessage after a while
+                setTimeout(() => this.setState({succesMessage: ''}), 2000)
+            }
+        })
+    }
+
+    handleUserAboutSubmit = event => {
+        event.preventDefault()
+        this.setState({loading: true})
+
+        const {account, updateAccount} = this.props
+        let {metaData} = this.props
+
+        if (!metaData) metaData = {}
+        if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
+        metaData.user_about = this.state.userAbout
         metaData = JSON.stringify(metaData);
 
         updateAccount({
@@ -107,6 +191,34 @@ class Settings extends React.Component {
                             </label>
                         </form>
                     </div>
+                    <div className="row">
+                        <form onSubmit={this.handleUserAboutSubmit} className="small-12 medium-6 large-4 columns">
+                            <label>{translate('add_about')}
+                                <input type="string" onChange={this.handleUserAboutChange} value={state.userAbout} disabled={!props.isOwnAccount || state.loading} required />
+                                {
+                                    state.errorMessage
+                                    ? <small className="error">{state.errorMessage}</small>
+                                    : state.succesMessage
+                                    ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                    : null
+                                }
+                            </label>
+                        </form>
+                    </div>
+                    <div className="row">
+                        <form onSubmit={this.handleUserBlogchainSubmit} className="small-12 medium-6 large-4 columns">
+                            <label>{translate('add_blogchain')}
+                                <input type="string" onChange={this.handleUserBlogchainChange} value={state.userBlogchain} disabled={!props.isOwnAccount || state.loading} required />
+                                {
+                                    state.errorMessage
+                                    ? <small className="error">{state.errorMessage}</small>
+                                    : state.succesMessage
+                                    ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                    : null
+                                }
+                            </label>
+                        </form>
+                    </div>
                 </div>
     }
 }
@@ -115,16 +227,20 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const {accountname} = 	ownProps.routeParams
-        const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
+        const account 		  = 	state.global.getIn(['accounts', accountname]).toJS()
         const current_user 	= 	state.user.get('current')
-        const username 		=	current_user ? current_user.get('username') : ''
-        const metaData 		=	account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        const username 		  =	  current_user ? current_user.get('username') : ''
+        const metaData 		  =	  account ? o2j.ifStringParseJSON(account.json_metadata) : {}
         const userImage     =   metaData ? metaData.user_image : ''
+        const userAbout     =   metaData ? metaData.user_about : ''
+        const userBlogchain =   metaData ? metaData.user_blogchain : ''
 
         return {
             account,
             metaData,
             userImage,
+            userAbout,
+            userBlogchain,
             isOwnAccount: username == accountname,
             ...ownProps
         }
