@@ -18,7 +18,7 @@ class CategorySelector extends React.Component {
         tabIndex: React.PropTypes.number,
 
         // redux connect (overwrite in HTML)
-        trending: React.PropTypes.object.isRequired, // Immutable.List
+        created: React.PropTypes.object.isRequired, // Immutable.List
     }
     static defaultProps = {
         autoComplete: 'on',
@@ -47,8 +47,8 @@ class CategorySelector extends React.Component {
         }
     }
     render() {
-        const {trending, tabIndex, disabled} = this.props
-        const categories = trending.slice(0, 11).filterNot(c => validateCategory(c))
+        const {created, tabIndex, disabled} = this.props
+        const categories = created.slice(0, 11).filterNot(c => validateCategory(c))
         const {createCategory} = this.state
 
         const categoryOptions = categories.map((c, idx) =>
@@ -90,9 +90,9 @@ export function validateCategory(category, required = true) {
     )
 }
 export default connect((state, ownProps) => {
-    const trending = state.global.get('category_idx').get('trending')
+    const created = state.global.get('category_idx').get('created')
     // apply translations
     // they are used here because default prop can't acces intl property
     const placeholder = translate('tag_your_story');
-    return { trending, placeholder, ...ownProps, }
+    return { created, placeholder, ...ownProps, }
 })(CategorySelector);

@@ -4,7 +4,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 export default ({post, horizontal}) => {
-    let sort_order = 'trending';
+    let sort_order = 'created';
     if (process.env.BROWSER && window.last_sort_order) sort_order = window.last_sort_order;
     if (!horizontal) return <strong><Link to={`/${sort_order}/${post.category}`}>{detransliterate(post.category)}</Link></strong>;
 

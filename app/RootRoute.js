@@ -16,22 +16,9 @@ export default {
             //});
         // golos.io ICO page
         // вот бы кто определился с названиями страниц, а то у нас 2 ico
-        } else if (route.page === 'Ico') {
-            cb(null, [require('app/components/pages/Ico')]);
-        // golos.io landing page
-        } else if (route.page === 'Landing') {
-            cb(null, [require('app/components/pages/Landing')]);
         } else if (route.page === 'Login') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Login')]);
-            //});
-        } else if (route.page === 'Privacy') {
-            //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Privacy')]);
-            //});
-        } else if (route.page === 'Support') {
-            //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Support')]);
             //});
         } else if (route.page === 'XSSTest' && process.env.NODE_ENV === 'development') {
             //require.ensure([], (require) => {
@@ -48,26 +35,6 @@ export default {
         } else if (route.page === 'ChangePassword') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/ChangePasswordPage')]);
-            //});
-        } else if (route.page === 'CreateAccount') {
-            //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/CreateAccount')]);
-            //});
-        } else if (route.page === 'RecoverAccountStep1') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/RecoverAccountStep1')]);
-            //});
-        } else if (route.page === 'RecoverAccountStep2') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/RecoverAccountStep2')]);
-            //});
-        } else if (route.page === 'WaitingList') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/WaitingList')]);
-            //});
-        } else if (route.page === 'Witnesses') {
-            //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Witnesses')]);
             //});
         } else if (route.page === 'SubmitPost') {
             //require.ensure([], (require) => {

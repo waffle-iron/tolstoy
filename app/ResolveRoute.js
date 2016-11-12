@@ -2,19 +2,10 @@ export default function resolveRoute(path)
 {
     // routes
     if (path === '/') {
-        return {page: 'Landing'}; // LANDING
-        //return {page: 'PostsIndex', params: ['trending']};
+        return {page: 'PostsIndex', params:['created']}
     }
     if (path === '/about.html') {
         return {page: 'About'};
-    }
-    // golos.io ICO page
-    //if (path === '/ico.html') {
-    //    return {page: 'Ico'};
-    //}
-    // golos.io landing page
-    if (path === '/ico') {
-        return {page: 'Landing'};
     }
     if (path === '/login.html') {
         return {page: 'Login'};
@@ -39,15 +30,6 @@ export default function resolveRoute(path)
     }
     if (path === '/create_account') {
         return {page: 'CreateAccount'};
-    }
-    if (path === '/recover_account_step_1') {
-        return {page: 'RecoverAccountStep1'};
-    }
-    if (path === '/recover_account_step_2') {
-        return {page: 'RecoverAccountStep2'};
-    }
-    if (path === '/waiting_list.html') {
-        return {page: 'WaitingList'};
     }
     if (path === '/market') {
         return {page: 'Market'};
