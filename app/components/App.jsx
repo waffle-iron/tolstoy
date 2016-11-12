@@ -24,7 +24,7 @@ import {githash} from 'config/last-build'
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
+        this.state = {open: null, showCallout: false, showBanner: true, expandCallout: false};
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
