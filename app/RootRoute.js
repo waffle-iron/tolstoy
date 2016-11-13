@@ -4,11 +4,14 @@
 import App from 'app/components/App';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import resolveRoute from './ResolveRoute';
+import {getLogger} from './utils/Logger'
+const print = getLogger('RootRoute').print
 
 export default {
     path: '/',
     component: App,
     getChildRoutes(nextState, cb) {
+        print('nextState', nextState)
         const route = resolveRoute(nextState.location.pathname);
         if (route.page === 'About') {
             //require.ensure([], (require) => {
@@ -16,8 +19,8 @@ export default {
             //});
         // golos.io ICO page
         // вот бы кто определился с названиями страниц, а то у нас 2 ico
-      } else if (route.page === 'Ico') {
-            cb(null, [require('app/components/pages/Ico')]);
+        } else if (route.page === 'Ico') {
+              cb(null, [require('app/components/pages/Ico')]);
         // golos.io landing page
         } else if (route.page === 'Landing') {
             cb(null, [require('app/components/pages/Landing')]);

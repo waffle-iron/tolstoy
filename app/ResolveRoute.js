@@ -1,5 +1,9 @@
+import {getLogger} from './utils/Logger'
+const print = getLogger('ResolveRoute').print
+
 export default function resolveRoute(path)
 {
+    print('path', path)
     // routes
     if (path === '/') {
         return {page: 'PostsIndex', params:['created']}
