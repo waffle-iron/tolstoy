@@ -103,7 +103,7 @@ export default class UserProfile extends React.Component {
         const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
-        const name = account.name;
+        const {name} = account
         let tab_content = null;
 
         const global_status = this.props.global.get('status');
@@ -185,9 +185,9 @@ export default class UserProfile extends React.Component {
         } else if(!section || section === 'blog') {
             if (account.blog) {
                 const emptyText = isMyAccount ? <div>
-                    Looks like you haven't posted anything yet.<br />
-                    <Link to="/submit.html">Submit a Story</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
+                    {translate('looks_like_you_havent_followed_anything_yet')}.<br />
+                    <Link to="/submit.html">{translate('submit_a_story')}</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">{translate('read_the_beginners_guide')}</a>
                 </div>:
                     <div>{translate('user_hasnt_started_bloggin_yet', {name})}</div>;
                 tab_content = <PostsList
@@ -250,12 +250,28 @@ export default class UserProfile extends React.Component {
         }
 
         let printLink = null;
-        if( section === 'permissions' ) {
+        let section_title = account.name + ' / ' + section;
+        if( section === 'blog' ) {
+           section_title = translate('users_blog', {name});
+        } else if( section === 'transfers' ) {
+           section_title = account.name + translate('users_wallet', {name});
+        } else if( section === 'curation-rewards' ) {
+          section_title = account.name + translate('users_curation_rewards', {name});
+        } else if( section === 'author-rewards' ) {
+          section_title = account.name + translate('users_author_rewards', {name});
+        } else if( section === 'password' ) {
+           section_title = ''
+        } else if( section === 'permissions' ) {
+           section_title = account.name + translate('users_permissions', {name})
            if(isMyAccount && wifShown) {
                printLink = <div><a className="float-right noPrint" onClick={onPrint}>
                        <Icon name="printer" />&nbsp;{translate('print')}&nbsp;&nbsp;
                    </a></div>
            }
+        } else if( section === 'posts' ) {
+           section_title = translate('users_posts', {name});
+        } else if( section === 'recent-replies' ) {
+           section_title = translate('recent_replies_to_users_posts', {name});
         }
 
         const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
@@ -274,7 +290,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">{translate('replies')} <NotifiCounter fields="comment_reply"/></Link></li>
-                    {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
+                    {/* <li><Link to={`/@${accountname}/feed`} activeClassName="active">{translate('feed')}</Link></li> */}
                     <li>
                         <LinkWithDropdown
                             closeOnClickOutside

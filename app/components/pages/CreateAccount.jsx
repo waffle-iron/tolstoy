@@ -10,6 +10,11 @@ import SignUp from 'app/components/modules/SignUp';
 import runTests from 'shared/ecc/test/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
+import { translate } from 'app/Translator';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import { FormattedHTMLMessage } from 'react-intl';
+import { SUPPORT_EMAIL } from 'config/client_config';
+
 
 class CreateAccount extends React.Component {
 
@@ -84,7 +89,7 @@ class CreateAccount extends React.Component {
                 if (res.error === 'Unauthorized') {
                     this.props.showSignUp();
                 }
-                this.setState({server_error: res.error || 'Unknown', loading: false});
+                this.setState({server_error: res.error || translate('unknown'), loading: false});
             } else {
                 window.location = `/login.html#account=${name}&msg=accountcreated`;
                 // this.props.loginUser(name, password);
@@ -121,16 +126,16 @@ class CreateAccount extends React.Component {
             if (!name_error) {
                 this.setState({name_error: ''});
                 promise = Apis.db_api('get_accounts', [name]).then(res => {
-                    return res && res.length > 0 ? 'Account name is not available' : '';
+                    return res && res.length > 0 ? translate('account_name_is_not_available') : '';
                 });
             }
         }
         if (promise) {
-            promise
-                .then(name_error => this.setState({name_error}))
-                .catch(() => this.setState({
-                    name_error: "Account name can't be verified right now due to server failure. Please try again later."
-                }));
+          promise
+            .then(name_error => this.setState({name_error}))
+            .catch(() => this.setState({
+                name_error: translate('account_name_cant_be_verified_right_now_due_to_server_failure')
+            }));
         } else {
             this.setState({name_error});
         }
@@ -140,7 +145,7 @@ class CreateAccount extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    Loading..
+                    {translate('loading')}..
                 </div>
             </div>;
         }
@@ -154,13 +159,13 @@ class CreateAccount extends React.Component {
         const submit_btn_disabled =
             loading || !name || !password_valid ||
             name_error;
-        const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
+        const submit_btn_class = 'button action uppercase' + (submit_btn_disabled ? ' disabled' : '');
 
         if (serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.</p>
+                        <p>{translate('membership_invitation_only')}</p>
                     </div>
                 </div>
             </div>;
@@ -169,10 +174,15 @@ class CreateAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>Cryptography test failed</h4>
-                        <p>We will be unable to create your Steem account with this browser.</p>
-                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
-                            are well tested and known to work with steemit.com.</p>
+                        <h4>{translate('ctyptography_test_failed')}</h4>
+                        <p>{translate('we_will_be_unable_to_create_account_with_this_browser')}.</p>
+                        <p>
+                            {translate('the_latest_versions_of') + ' '}
+                            <a href="https://www.google.com/chrome/">Chrome</a>
+                            {' ' + translate('and')}
+                            <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                            {' ' + translate('are_well_tested_and_known_to_work_with')}
+                        </p>
                     </div>
                 </div>
             </div>;
@@ -185,8 +195,8 @@ class CreateAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create another account.</p>
-                        <p>Please note that Steemit can only register one account per verified user.</p>
+                        <p>{translate('you_need_to_logout_before_creating_account', { logoutLink: <a href="#" onClick={logout}>{translate('logout')}</a>})}.</p>
+                        <p>{translate('steemit_can_only_register_one_account_per_verified_user')}.</p>
                     </div>
                 </div>
             </div>;
@@ -197,10 +207,15 @@ class CreateAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
-                        <p>In order to prevent abuse Steemit can only register one account per verified user.</p>
-                        <p>You can either <a href="/login.html">login</a> to your existing account
-                            or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
+                        <p>{translate('our_records_indicate_you_already_have_account')}: <strong>{existingUserAccount}</strong></p>
+                        <p>{translate('to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user', {amount: localizedCurrency(3)})}</p>
+                        <p>
+                            {translate('you_can_either') + ' '}
+                            <a href="/login.html">{translate('login')}</a>
+                            {translate('to_your_existing_account_or') + ' '}
+                            <a href={"mailto:" + SUPPORT_EMAIL}>{translate('send_us_email')}</a>
+                            {' ' + translate('if_you_need_a_new_account')}.
+                        </p>
                     </div>
                 </div>
             </div>;
@@ -210,15 +225,15 @@ class CreateAccount extends React.Component {
         if (server_error) {
             if (server_error === 'Email address is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href="/enter_email">Please verify your email address</a>
+                    <a href="/enter_email">{translate('please_verify_your_email_address')}</a>
                 </div>;
             } else if (server_error === 'Phone number is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href="/enter_mobile">Please verify your phone number</a>
+                    <a href="/enter_mobile">{translate('please_verify_your_phone_number')}</a>
                 </div>;
             } else {
                 next_step = <div className="callout alert">
-                    <h5>Couldn't create account. Server returned the following error:</h5>
+                    <h5>{translate('couldnt_create_account_server_returned_error')}:</h5>
                     <p>{server_error}</p>
                 </div>;
             }
@@ -232,13 +247,7 @@ class CreateAccount extends React.Component {
                         <br />
                         {showRules ? <div className="CreateAccount__rules">
                             <p>
-                                The first rule of Steemit is: Do not lose your password.<br />
-                                The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
-                                The third rule of Steemit is: We cannot recover your password.<br />
-                                The fourth rule: If you can remember the password, it&apos;s not secure.<br />
-                                The fifth rule: Use only randomly-generated passwords.<br />
-                                The sixth rule: Do not tell anyone your password.<br />
-                                The seventh rule: Always back up your password.
+                                <FormattedHTMLMessage id="the_rules_of_APP_NAME" />
                             </p>
                             <div className="text-center">
                                 <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>
@@ -247,12 +256,11 @@ class CreateAccount extends React.Component {
                             </div>
                             <hr />
                         </div> : <div className="text-center">
-                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>Steemit
-                                Rules &nbsp; &raquo;</a>
+                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>{translate('APP_NAME_rules')} &nbsp; &raquo;</a>
                         </div>}
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
                             <div className={name_error ? 'error' : ''}>
-                                <label>ACCOUNT NAME
+                                <label>{translate('account_name')}
                                     <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
                                 </label>
                                 <p>{name_error}</p>
@@ -262,11 +270,11 @@ class CreateAccount extends React.Component {
                             {next_step && <div>{next_step}<br /></div>}
                             <noscript>
                                 <div className="callout alert">
-                                    <p>This form requires javascript to be enabled in your browser</p>
+                                    <p>{translate('this_form_requires_javascript_to_be_enabled_in_your_browser')}</p>
                                 </div>
                             </noscript>
                             {loading && <LoadingIndicator type="circle" />}
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Create Account" />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value={translate('create_account')} />
                         </form>
                     </div>
                 </div>
