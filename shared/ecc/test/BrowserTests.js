@@ -5,7 +5,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 
 export const browserTests = {}
 
-export default function runTests() {
+export default function runTests() {return;
     let rpt = ''
     let pass = true
     function it(name, fn) {

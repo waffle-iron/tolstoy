@@ -4,6 +4,9 @@ export default function resolveRoute(path)
     if (path === '/') {
         return {page: 'PostsIndex', params:['created']}
     }
+    if (path === '/ico') {
+        return {page: 'Landing'};
+    }
     if (path === '/about.html') {
         return {page: 'About'};
     }
