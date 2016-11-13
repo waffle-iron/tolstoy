@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import { translate } from 'app/Translator';
+import { formatCoins } from 'app/utils/FormatCoins';
 
 class TagsIndex extends React.Component {
     static propTypes = {
@@ -10,10 +12,7 @@ class TagsIndex extends React.Component {
         order: React.PropTypes.string,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {search: ''};
-    }
+    state = { search: '' }
 
     shouldComponentUpdate(nextProps, nextState) {
         const res = this.props.tagsList !== nextProps.tagsList ||
@@ -36,7 +35,8 @@ class TagsIndex extends React.Component {
         const order = this.props.routeParams.order;
         let tags = tagsAll;
         if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
-        tags = tags.filter(tag => tag.get('name')).sort((a,b) => {
+        tags.map((tag) => {console.log(tag.get('name'))})
+        tags = tags.filter(tag => tag.get('name')).sort((a, b) => {
             return a.get('name').localeCompare(b.get('name'));
         }).map(tag => {
             const name = tag.get('name');
@@ -47,21 +47,22 @@ class TagsIndex extends React.Component {
                     <Link to={link} activeClassName="active">{name}</Link>
                 </td>
                 <td>{tag.get('discussions')}</td>
-                <td>{tag.get('total_payouts')}</td>
+                <td>{formatCoins(tag.get('total_payouts'))}</td>
             </tr>);
         }).toArray();
+
         return (
             <div className="TagsIndex row">
                 <div className="column">
                     <div className="medium-2 medium-offset-10">
-                        <input type="text" placeholder="Filter" value={search} onChange={this.onChangeSearch} />
+                        <input type="text" placeholder={translate('filter')} value={search} onChange={this.onChangeSearch} />
                     </div>
                     <table>
                         <thead>
                         <tr>
-                            <th>Tag</th>
-                            <th>Replies</th>
-                            <th>Payouts</th>
+                            <th>{translate("tag")}</th>
+                            <th>{translate("replies")}</th>
+                            <th>{translate("payouts")}</th>
                         </tr>
                         </thead>
                         <tbody>

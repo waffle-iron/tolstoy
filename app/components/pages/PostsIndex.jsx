@@ -17,8 +17,7 @@ class PostsIndex extends React.Component {
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
-        loading: PropTypes.bool,
-        current_user: PropTypes.object
+        loading: PropTypes.bool
     };
 
     static defaultProps = {
@@ -73,9 +72,9 @@ class PostsIndex extends React.Component {
             const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
             if (isMyAccount) {
                 emptyText = <div>
-                    Looks like you haven't followed anything yet.<br />
-                    <Link to="/trending">Explore Steemit</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
+                    {translate('looks_like_you_havent_followed_anything_yet')}.<br />
+                    <Link to="/trending">{translate('explore_APP_NAME')}</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">{translate('read_the_beginners_guide')}</a>
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
@@ -84,7 +83,7 @@ class PostsIndex extends React.Component {
         } else {
             posts = this.getPosts(order, category);
             if (posts !== null && posts.size === 0) {
-                emptyText = `No ` + topics_order + ` #` + category +  ` posts found`;
+                emptyText = `No ` + topics_order + ` #` + category + ` posts found`;
             }
         }
 
@@ -120,12 +119,12 @@ module.exports = {
     path: ':order(/:category)',
     component: connect(
         (state) => {
+            // console.log('state.global', state.global)
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                global: state.global,
-                current_user: state.user.get('current')
+                global: state.global
             };
         },
         (dispatch) => {
