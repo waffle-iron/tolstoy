@@ -8,6 +8,7 @@ import Callout from 'app/components/elements/Callout';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
+import { translate } from 'app/Translator';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -23,10 +24,7 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        emptyText: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.node,
-        ]),
+        emptyText: PropTypes.string,
         showSpam: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
@@ -157,13 +155,12 @@ class PostsList extends React.Component {
     render() {
         const {posts, loading, category, emptyText} = this.props;
         const {comments} = this.props
-        const {account} = this.props
         const {thumbSize, showPost} = this.state
         if (!loading && !posts.length && emptyText) {
-            return <Callout>{emptyText}</Callout>;
+            return <Callout body={emptyText} type="success" />;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
-            <PostSummary account={account} post={item} currentCategory={category} thumbSize={thumbSize}
+            <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
                 ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} onClick={this.onPostClick} />
         </li>)
         return (
@@ -175,7 +172,7 @@ class PostsList extends React.Component {
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
+                            <button className="back-button" type="button" title={translate('back')} onClick={() => {this.setState({showPost: null})}}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
                             <CloseButton onClick={() => {this.setState({showPost: null})}} />
@@ -195,18 +192,33 @@ import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {
+
         const {posts, showSpam} = props;
         const comments = []
         const pathname = state.app.get('location').pathname;
+        const current = state.user.get('current')
+        const username = current ? current.get('username') : null
+
         posts.forEach(item => {
-            const content = state.global.get('content').get(item);
+            let content = state.global.get('content').get(item);
+
+            // when you go to 'blog' tab in user profile content is not getting picked up properly,
+            // due to bad content key (it's 'sometitle' instead of 'username/sometitle')
+            // no idead how this did happanen. But this workaround fixes the issue
+
+            // if there is no content add username to content key
             if(!content) {
-                console.error('PostsList --> Missing content key', item)
-                return
+                item = props.accountName + '/' + item
+                content = state.global.get('content').get(item)
+                // only if content is still missing throw actual error
+                if(!content) {
+                    console.error('PostsList --> Missing content key', item)
+                    return
+                }
             }
+
             // let total_payout = 0;
-            const current = state.user.get('current')
-            const username = current ? current.get('username') : null
+
             const key = ['follow', 'get_following', username, 'result', content.get('author')]
             const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
             const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()

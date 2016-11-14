@@ -15,6 +15,7 @@ import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 import TagList from 'app/components/elements/TagList';
+import { translate } from 'app/Translator';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -60,16 +61,15 @@ export default class PostSummary extends React.Component {
         let reblogged_by = content.get('first_reblogged_by')
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                             <Icon name="reblog" /> {translate('reblogged_by')} <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
                          </div>
         }
 
         if(account && account != content.get('author')) {
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed
+                             <Icon name="reblog" /> {translate('reblogged')}
                          </div>
         }
-
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
@@ -100,8 +100,8 @@ export default class PostSummary extends React.Component {
         // author and category
         let author_category = <span className="vcard">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
-            {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <TagList post={p} single />
+            {} {translate('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} {translate('in')} <TagList post={p} single />
         </span>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {

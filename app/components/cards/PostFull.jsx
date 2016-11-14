@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import pluralize from 'pluralize';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 // import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -10,6 +9,7 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
+import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -21,19 +21,23 @@ import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
+import { translate } from 'app/Translator';
+import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
         <span className="PostFull__time_author_category vcard">
-            <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} className="updated" />
-            {} by <Author author={content.author} authorRepLog10={authorRepLog10} />
-            {showTags && <span> in <TagList post={content} single /></span>}
+            <Tooltip t={new Date(content.created).toLocaleString()}>
+                <Icon name="clock" className="space-right" />
+                <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
+            </Tooltip>
+            <span> {translate('by')} <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
+            {showTags && <span> {translate('in')}&nbsp;<TagList post={content} /></span>}
         </span>
      );
 }
 
-export default class PostFull extends React.Component {
+class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */
@@ -124,7 +128,7 @@ export default class PostFull extends React.Component {
         const winTop = (screen.height / 2) - (winWidth / 2);
         const winLeft = (screen.width / 2) - (winHeight / 2);
         const s = this.share_params;
-        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Steemit&mini=true';
+        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=' + APP_NAME_LATIN + '&mini=true';
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
@@ -150,7 +154,7 @@ export default class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — Steemit';
+        if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
@@ -172,8 +176,8 @@ export default class PostFull extends React.Component {
             net_rshares.compare(Long.ZERO) <= 0
 
         this.share_params = {
-            url: 'https://steemit.com' + link,
-            title: title + ' — Steemit',
+            url: 'https://' + APP_URL + link,
+            title: title + ' — ' + APP_NAME,
             desc: p.desc
         };
 
@@ -202,6 +206,8 @@ export default class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
+        const showEditOption = username === author && post_content.get('mode') != 'archived'
+        const authorRepLog10 = repLog10(content.author_reputation)
 
         let post_header = <h1 className="entry-title">{content.title}</h1>
         if(content.depth > 0) {
@@ -210,32 +216,32 @@ export default class PostFull extends React.Component {
             if(content.depth > 1) {
                 direct_parent_link = <li>
                     <Link to={parent_link}>
-                        View the direct parent
+                        {translate('view_the_direct_parent')}
                     </Link>
                 </li>
             }
             post_header = <div className="callout">
                 <h3 className="entry-title">RE: {content.root_title}</h3>
-                <h5>You are viewing a single comment&#39;s thread from:</h5>
+                <h5>{translate('you_are_viewing_single_comments_thread_from')}:</h5>
                 <p>
                     {content.root_title}
                 </p>
                 <ul>
                     <li>
                         <Link to={content.url}>
-                            View the full context
+                            {translate('view_the_full_context')}
                         </Link>
                     </li>
                     {direct_parent_link}
                 </ul>
             </div>
         }
-
         const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
-        const showEditOption = username === author
-        const authorRepLog10 = repLog10(content.author_reputation)
+        const archived    = post_content.get('mode') === 'archived'
+        const firstPayout = post_content.get('mode') === "first_payout"
+        const rootComment = post_content.get('depth') == 0
 
         return (
             <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
@@ -253,7 +259,7 @@ export default class PostFull extends React.Component {
                     </span>
                 }
 
-                {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
+                {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
@@ -263,17 +269,22 @@ export default class PostFull extends React.Component {
                     <div className="column shrink">
                             {!readonly && <Reblog author={author} permlink={permlink} />}
                             <span className="PostFull__responses">
-                                <Link to={link} title={pluralize('Responses', content.children, true)}>
+                                <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>
-                            {!readonly &&
-                                <span className="PostFull__reply">
-                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                            <span className="PostFull__reply">
+                                {!$STM_Config.read_only_mode && <a onClick={onShowReply}>{translate('reply')}</a>}
+                                {showEditOption && !showEdit && <span>
+                                    &nbsp;&nbsp;
+                                    <a onClick={onShowEdit}>{translate('edit')}</a>
                                 </span>}
-                            <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
+                                {showDeleteOption && !showReply && <span>
+                                    &nbsp;&nbsp;
+                                    <a onClick={onDeletePost}>{translate('delete')}</a>
+                                </span>}
+                            </span>
+                            <FoundationDropdownMenu menu={share_menu} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>
                 </div>
                 <div className="row">
@@ -302,7 +313,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: 'Are you sure?'
+                confirm: translate('are_you_sure')
             }));
         },
         showPromotePost: (author, permlink) => {
