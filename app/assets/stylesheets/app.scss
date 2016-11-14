@@ -85,9 +85,10 @@ label {
   width: 640px;
 }
 
+.uppercase {text-transform: uppercase}
+
 @media print {
   .noPrint {
-    display: none;
+    display:none;
   }
 }
-
