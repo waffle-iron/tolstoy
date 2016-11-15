@@ -5,6 +5,7 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
+import { Route, Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -13,9 +14,11 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
-import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
-import { translate } from '../Translator.js';
+import {key_utils} from 'shared/ecc'
+import { translate } from 'app/Translator.js';
+import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 class App extends React.Component {
     constructor(props) {
@@ -74,7 +77,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {location, params, children, flash, showSignUp, new_visitor,
+        const {location, params, children, loading, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account';
@@ -102,7 +105,7 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {translate('steemit_is_now_open_source')}
+                                    {translate('APP_URL_is_now_open_source')}
                                 </a>
                             </li>
                             <li>
@@ -136,13 +139,13 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email"> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="/enter_email" onClick={showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href={LANDING_PAGE_URL} target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
                             </div>
                         </div>
                     </div>
@@ -235,6 +238,7 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
+
             </div>
             <Dialogs />
             <Modals />
@@ -247,6 +251,7 @@ App.propTypes = {
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
     signup_bonus: React.PropTypes.string,
+    loading: React.PropTypes.bool,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
 };
@@ -257,6 +262,7 @@ export default connect(
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),
+            loading: state.app.get('loading'),
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
@@ -271,7 +277,7 @@ export default connect(
             dispatch(user.actions.showSignUp());
         },
         depositSteem: () => {
-            dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
+            dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: VEST_TICKER}}));
         },
     })
 )(App);
