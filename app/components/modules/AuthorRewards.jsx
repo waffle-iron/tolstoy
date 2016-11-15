@@ -3,6 +3,10 @@ import React from 'react';
 import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
+import { translate } from 'app/Translator';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, INVEST_TOKEN,
+LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+
 
 class AuthorRewards extends React.Component {
     constructor() {
@@ -10,10 +14,10 @@ class AuthorRewards extends React.Component {
         this.state = {historyIndex: 0}
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
         this.onShowDepositSteem = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
         }
         this.onShowDepositPower = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
     }
@@ -35,7 +39,6 @@ class AuthorRewards extends React.Component {
 
         /// transfer log
         let rewards24Vests = 0, rewardsWeekVests = 0, totalRewardsVests = 0;
-        let rewards24Steem = 0, rewardsWeekSteem = 0, totalRewardsSteem = 0;
         let rewards24SBD = 0, rewardsWeekSBD = 0, totalRewardsSBD = 0;
         const today = new Date();
         const oneDay = 86400 * 1000;
@@ -50,25 +53,20 @@ class AuthorRewards extends React.Component {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }
                 firstDate = new Date(item[1].timestamp).getTime();
+                const vest = assetFloat(item[1].op[1].vesting_payout, VEST_TICKER);
+                const sbd = assetFloat(item[1].op[1].sbd_payout, DEBT_TICKER);
 
-                const vest  = assetFloat(item[1].op[1].vesting_payout, 'VESTS');
-                const steem = assetFloat(item[1].op[1].steem_payout, 'STEEM');
-                const sbd   = assetFloat(item[1].op[1].sbd_payout, 'SBD');
-
-                if (new Date(item[1].timestamp).getTime() > lastWeek) {
-                    if (new Date(item[1].timestamp).getTime() > yesterday) {
-                        rewards24Vests += vest;
-                        rewards24Steem += steem;
-                        rewards24SBD   += sbd;
-                    }
+                if (new Date(item[1].timestamp).getTime() > yesterday) {
+                    rewards24Vests += vest;
                     rewardsWeekVests += vest;
-                    rewardsWeekSteem += steem;
-                    rewardsWeekSBD   += sbd;
+                    rewards24SBD += sbd;
+                    rewardsWeekSBD += sbd;
+                } else if (new Date(item[1].timestamp).getTime() > lastWeek) {
+                    rewardsWeekVests += vest;
+                    rewardsWeekSBD += sbd;
                 }
                 totalRewardsVests += vest;
-                totalRewardsSteem += steem;
-                totalRewardsSBD   += sbd;
-
+                totalRewardsSBD += sbd;
                 return <TransferHistoryRow key={index} op={item} context={account.name} />
             }
             return null;
@@ -78,8 +76,7 @@ class AuthorRewards extends React.Component {
         const curationLength = author_log.length;
         const daysOfCuration = (firstDate - finalDate) / oneDay || 1;
         const averageCurationVests = !daysOfCuration ? 0 : totalRewardsVests / daysOfCuration;
-        const averageCurationSteem = !daysOfCuration ? 0 : totalRewardsSteem / daysOfCuration;
-        const averageCurationSBD   = !daysOfCuration ? 0 : totalRewardsSBD   / daysOfCuration;
+        const averageCurationSBD = !daysOfCuration ? 0 : totalRewardsSBD / daysOfCuration;
         const hasFullWeek = daysOfCuration >= 7;
         const limitedIndex = Math.min(historyIndex, curationLength - 10);
         author_log = author_log.reverse().filter(() => {
@@ -91,13 +88,13 @@ class AuthorRewards extends React.Component {
              <nav>
                <ul className="pager">
                  <li>
-                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
-                         <span aria-hidden="true">&larr; Newer</span>
+                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label={translate('newer')}>
+                         <span aria-hidden="true">&larr; {translate('newer')}</span>
                      </div>
                  </li>
                  <li>
-                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label="Next">
-                         <span aria-hidden="true">Older &rarr;</span>
+                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label={translate('older')}>
+                         <span aria-hidden="true">{translate('older')} &rarr;</span>
                      </div>
                  </li>
                </ul>
@@ -106,44 +103,38 @@ class AuthorRewards extends React.Component {
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12">
-                    <h4>AUTHOR REWARDS</h4>
+                    <h4 className="uppercase">{translate('author_rewards')}</h4>
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    Author rewards last 24 hours:
+                    {translate('author_rewards_last_24_hours')}:
                 </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " STEEM POWER"}
+                <div className="column small-12 medium-3">
+                    {numberWithCommas(vestsToSp(this.props.state, [rewards24Vests, VEST_TICKER].join(" "))) + " " + INVEST_TOKEN}
                     <br />
-                    {rewards24Steem.toFixed(3) + " STEEM"}
-                    <br />
-                    {rewards24SBD.toFixed(3) + " SD"}
+                    {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
 
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    Daily average author rewards:
+                    {translate('daily_average_author_rewards')}:
                 </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " STEEM POWER"}
+                <div className="column small-12 medium-3">
+                    {numberWithCommas(vestsToSp(this.props.state, [averageCurationVests, VEST_TICKER].join(" ") )) + " " + INVEST_TOKEN}
                     <br />
-                    {averageCurationSteem.toFixed(3) + " STEEM"}
-                    <br />
-                    {averageCurationSBD.toFixed(3) + " SD"}
+                    {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    {!hasFullWeek ? "Estimated author rewards last week" : "Author rewards last week"}:
+                    {translate(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " STEEM POWER"}
+                <div className="column small-12 medium-3">
+                    {numberWithCommas(vestsToSp(this.props.state, [(hasFullWeek ? rewardsWeekVests : averageCurationVests * 7), VEST_TICKER].join(" ") )) + " " + INVEST_TOKEN}
                     <br />
-                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " STEEM"}
-                    <br />
-                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " SD"}
+                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
 
@@ -156,7 +147,7 @@ class AuthorRewards extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4>AUTHOR REWARDS HISTORY</h4>
+                    <h4 className="uppercase">{translate('author_rewards_history')}</h4>
                     {navButtons}
                     <table>
                         <tbody>

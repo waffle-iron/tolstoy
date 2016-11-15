@@ -10,6 +10,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
+import { translate } from 'app/Translator';
 
 const defaultNavigate = (e) => {
     e.preventDefault();
@@ -17,41 +18,48 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>Submit a Story</a></li>;
+    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{translate("submit_a_story")}</a></li>;
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
+    const crowdsale_link = `/@${username}/crowdsale`;
+    const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
-    const comments_link = `/@${username}/comments`;
+    const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
+    function trackAnalytics(eventType) {
+        console.log(eventType)
+        analytics.track(eventType)
+    }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: 'Feed', addon: <NotifiCounter fields="feed" />},
-            {link: account_link, value: 'Blog'},
-            {link: comments_link, value: 'Comments'},
-            {link: replies_link, value: 'Replies', addon: <NotifiCounter fields="comment_reply" />},
-            {link: wallet_link, value: 'Wallet', addon: <NotifiCounter fields="follow,send,receive,account_update" />},
-            {link: reset_password_link, value: 'Change Password'},
+            {link: feed_link, value: translate('feed'), addon: <NotifiCounter fields="feed" />},
+            {link: account_link, value: translate('blog')},
+            {link: posts_link, value: translate('comments')},
+            {link: replies_link, value: translate('replies'), addon: <NotifiCounter fields="comment_reply" />},
+            {link: wallet_link, value: translate('wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: reset_password_link, value: translate('change_password')},
+            {link: settings_link, value: translate('settings')},
             loggedIn ?
-                {link: '#', onClick: logout, value: 'Logout'} :
-                {link: '#', onClick: showLogin, value: 'Login'}
+                {link: '#', onClick: logout, value: translate('logout')} :
+                {link: '#', onClick: showLogin, value: translate('login')}
         ];
+        const search = translate('search')
         return (
-            <ul className={mcn + mcl}>
-                <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>Search</span> : <Icon name="search" />}</a></li>
+            <ul className={mcn}>
+                <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
-                    dropdownContent={
-                                <VerticalMenu items={user_menu} title={username} />
-                              }
+                    dropdownContent={<VerticalMenu items={user_menu} title={username} />}
+                    onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
@@ -69,7 +77,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
-                {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
+                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -78,16 +86,16 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
         );
     }
     return (
-        <ul className={mcn + mcl}>
-            {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/enter_email">Sign Up</a></li>
-            <li className={lcn}><a href="/login.html" onClick={showLogin}>Login</a></li>
-            {submit_story}
-            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                <span className="hamburger" />
-            </a></li>}
-        </ul>
-    );
+            <ul className={mcn + mcl}>
+                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
+                <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
+                {submit_story}
+                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                    <span className="hamburger" />
+                </a></li>}
+            </ul>
+        );
 }
 
 TopRightMenu.propTypes = {

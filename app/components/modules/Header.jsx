@@ -6,7 +6,9 @@ import Icon from 'app/components/elements/Icon.jsx';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+import { APP_NAME, APP_ICON } from 'config/client_config';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -73,98 +75,54 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = "Home"
+                page_title = translate('feed')
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
                 if (route.params.length > 1) {
                     topic = route.params[1];
-                    // Overwrite default created for more human readable title
-                    if (route.params[0] === "created") {
-                        page_title = `New ${topic} posts`;
-                    }
-                    else {
-                        page_title = `${sort_order} ${topic} posts`;
-                    }
+                    page_title = `${topic}/${sort_order}`;
                 } else {
-                    if (route.params[0] === "created") {
-                        page_title = `New posts`;
-                    }
-                    else {
-                        page_title = `${sort_order} posts`;
-                    }
+                    page_title = `${sort_order}`;
                 }
             }
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
-        } else if (route.page == 'SubmitPost') {
-            page_title = `Create a Post`;
-        } else if (route.page == 'Privacy') {
-            page_title = `Privacy Policy`;
-        } else if (route.page == 'Tos') {
-            page_title = `Terms of Service`;
-        } else if (route.page == 'ChangePassword') {
-            page_title = `Change Account Password`;
-        } else if (route.page == 'CreateAccount') {
-            page_title = `Create Account`;
-        } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
-            page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
-            if(route.params[1] === "followers"){
-                page_title = `People following ${user_name} `;
-            }
-            if(route.params[1] === "followed"){
-                page_title = `People followed by ${user_name} `;
-            }
-            if(route.params[1] === "curation-rewards"){
-                page_title = `Curation rewards by ${user_name} `;
-            }
-            if(route.params[1] === "author-rewards"){
-                page_title = `Author rewards by ${user_name} `;
-            }
-            if(route.params[1] === "recent-replies"){
-                page_title = `Replies by ${user_name} `;
-            }
-            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-            if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = `Comments by ${user_name} `;
-            }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
-        // Always format first letter of all titles capitalized for consistency & readability
-        page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
+        if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;
 
-        if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — Steemit';
-
-        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
-        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/hot';
+        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = [
-            ['created', 'new'],
-            ['hot', 'hot'],
-            ['trending', 'trending (24 hour)'],
-            ['trending30', 'trending (30 day)'],
-            ['promoted', 'promoted'],
-            ['active', 'active']
+            ['created', translate('new')],
+            ['hot', translate('hot')],
+            ['trending', translate('trending_24_hour')],
+            ['trending30', translate('trending_30_day')],
+            ['promoted', translate('promoted')],
+            ['active', translate('active')]
         ];
-        if (current_account_name) sort_orders.unshift(['home', 'home']);
+        if (current_account_name) sort_orders.unshift(['home', translate('home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
-        const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
-
+        // there were a problem when in root route ('/') when header menu didn't
+        // had any active links. Thats why selected_sort_order falls down to 'trending' if undefined
+        const selected_sort_order = sort_orders.find(so => so[0] === sort_order) || sort_orders[2];
         const sort_orders_horizontal = [
-            ['created', 'new'],
-            ['hot', 'hot'],
-            ['trending', 'trending'],
-            ['promoted', 'promoted'],
-            ['active', 'active']
+            ['created', translate('new')],
+            ['hot', translate('hot')],
+            ['trending', translate('trending')],
+            ['promoted', translate('promoted')],
+            ['active', translate('active')]
         ];
-        if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
+        if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
@@ -174,11 +132,12 @@ class Header extends React.Component {
         let sort_order_extra_menu = null;
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
-                {link: `/trending/${topic}`, value: '24 hour', active: sort_order === 'trending'},
-                {link: `/trending30/${topic}`, value: '30 day', active: sort_order === 'trending30'}
+                {link: `/trending/${topic}`, value: translate('24_hour'), active: sort_order === 'trending'},
+                {link: `/trending30/${topic}`, value: translate('30_day'), active: sort_order === 'trending30'}
             ];
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
+
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -187,10 +146,14 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        <Icon name="steem" size="2x" />
+                                        <Icon name={APP_ICON} size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
+
+                                <li className="Header__top-steemit show-for-medium noPrint">
+                                    <Link to={logo_link}>{APP_NAME}<span className="beta">alpha</span></Link>
+                                </li>
+
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}

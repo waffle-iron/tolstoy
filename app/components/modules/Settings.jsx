@@ -77,64 +77,85 @@ class Settings extends React.Component {
     render() {
         const {state, props} = this
         return <div className="Settings">
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_language')}
-                        <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
-                            <option value="en">English</option>
-                            <option value="ru">Russian</option>
-                            <option value="es">Spanish</option>
-                            <option value="es-AR">Spanish (Argentina)</option>
-                            <option value="fr">French</option>
-                            <option value="it">Italian</option>
-                            <option value="jp">Japanese</option>
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
+                    <div className="row">
+                        <Userpic account={this.props.routeParams.accountname} />
+                        <form onSubmit={this.handleUserImageSubmit} className="small-12 medium-6 large-4 columns">
+                            <label>{translate('add_image_url')}
+                                <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
+                                {
+                                    state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.succesMessage
+                                        ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                        : null
+                                }
+                            </label>
+                            <br />
+                            <input type="submit" className="button" value={translate('update')} disabled={!state.userImage || !state.changed} />
+                        </form>
+                    </div>
+                    <div className="row">
+                        <div className="small-12 medium-6 large-4 columns">
+                            {/* CHOOSE LANGUAGE */}
+                            <label>{translate('choose_language')}
+                              <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
+                                <option value="en">English</option>
+                                <option value="ru">Русский</option>
+                                <option value="uk">Українська</option> {/* in react-intl they use 'uk' instead of 'ua' */}
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="it">Italian</option>
+                                <option value="jp">Japanese</option>
+                              </select>
+                            </label>
+                            {/* CHOOSE CURRENCY */}
+                            <label>{translate('choose_currency')}
+                                <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
+                                    {
+                                        ALLOWED_CURRENCIES.map(i => {
+                                            return <option key={i} value={i}>{i}</option>
+                                        })
+                                    }
+                                </select>
+                            </label>
+                            {/* CHOOSE USER IMAGE */}
+                            <form onSubmit={this.handleUserImageSubmit}>
+                                <label>{translate('add_image_url')}
+                                    <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
+                                    {
+                                        state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.succesMessage
+                                        ? <small className="success">{state.succesMessage}</small>
+                                        : null
+                                    }
+                                </label>
+                                <p className="text-center" style={{marginTop: 16.8}}>
+                                    <input type="submit" className="button" value={translate('save_avatar')} />
+                                </p>
+                            </form>
+                        </div>
+                        <div className="small-12 medium-6 large-8 columns text-center">
                             {
-                                ALLOWED_CURRENCIES.map(i => {
-                                    return <option key={i} value={i}>{i}</option>
-                                })
-                            }
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
-            <div className="row">
-                <Userpic account={this.props.routeParams.accountname} />
-                <form onSubmit={this.handleUserImageSubmit} className="small-12 medium-6 large-4 columns">
-                    <label>{translate('add_image_url')}
-                        <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
-                        {
-                            state.errorMessage
-                                ? <small className="error">{state.errorMessage}</small>
-                                : state.succesMessage
-                                ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                state.userImage
+                                ? <img src={state.userImage} alt={translate('user_avatar') + ' ' + props.account.name} />
                                 : null
-                        }
-                    </label>
-                    <br />
-                    <input type="submit" className="button" value="Update" disabled={!state.userImage || !state.changed} />
-                </form>
-            </div>
-        </div>
+                            }
+                        </div>
+                    </div>
+                </div>
     }
 }
 
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const {accountname} =    ownProps.routeParams
-        const account = state.global.getIn(['accounts', accountname]).toJS()
-        const current_user = state.user.get('current')
-        const username = current_user ? current_user.get('username') : ''
-        const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
-        const userImage = metaData && metaData.profile ? metaData.profile.profile_image : ''
+        const {accountname} = 	ownProps.routeParams
+        const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
+        const current_user 	= 	state.user.get('current')
+        const username 		=	current_user ? current_user.get('username') : ''
+        const metaData 		=	account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        const userImage     =   metaData ? metaData.user_image : ''
 
         return {
             account,

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import {connect} from 'react-redux'
 import transaction from 'app/redux/Transaction'
+import { translate } from 'app/Translator';
 
 class ConfirmTransactionForm extends Component {
 
@@ -33,8 +34,8 @@ class ConfirmTransactionForm extends Component {
                <hr />
                <div>{conf}</div>
                <br />
-               <button className="button" onClick={okClick}>Ok</button>
-               <button type="button hollow" className="button hollow" onClick={onCancel}>Cancel</button>
+               <button className="button" onClick={okClick}>{translate('ok')}</button>
+               <button type="button hollow" className="button hollow" onClick={onCancel}>{translate('cancel')}</button>
            </div>
        )
     }
@@ -43,7 +44,11 @@ const typeName = confirmBroadcastOperation => {
     const title = confirmBroadcastOperation.getIn(['operation', '__config', 'title'])
     if(title) return title
     const type = confirmBroadcastOperation.get('type')
-    return 'Confirm ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
+    // this part was too complicated to add i18n
+    //  Plus i didn't know where and how exactly thi component is used
+    //  so i added generic 'Confirm Action' title
+    // return translate('confirm') + ' ' + translate((type.split('_').map(n => n.charAt(0).toLowerCase() + n.substring(1))).join(' '))
+    return translate('confirm') + ' ' + translate('action')
 }
 
 export default connect(
