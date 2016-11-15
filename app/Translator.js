@@ -4,6 +4,7 @@ import isObject from 'lodash/isObject';
 import isUndefined from 'lodash/isUndefined';
 import { connect } from 'react-redux'
 import { IntlProvider, addLocaleData, injectIntl } from 'react-intl';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import store from 'store';
 import { DEFAULT_LANGUAGE } from 'config/client_config';
 
@@ -20,24 +21,17 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-import frLocaleData from 'react-intl/locale-data/fr';
-import esLocaleData from 'react-intl/locale-data/es';
-import itLocaleData from 'react-intl/locale-data/it';
-addLocaleData([...enLocaleData, ...ruLocaleData, ...frLocaleData, ...esLocaleData, ...itLocaleData]);
+import ukLocaleData from 'react-intl/locale-data/uk'; // in react-intl they use 'uk' instead of 'ua'
+addLocaleData([...enLocaleData, ...ruLocaleData, ...ukLocaleData]);
 
 // Our translated strings
-import { en } from './locales/en';
 import { ru } from './locales/ru';
+import { en } from './locales/en';
 import { fr } from './locales/fr';
 import { es } from './locales/es';
 import { it } from './locales/it';
-const messages = {
-	en: en,
-	ru: ru,
-	fr: fr,
-	es: es,
-	it: it
-}
+import { ua as uk } from './locales/ua'; // in react-intl they use 'uk' instead of 'ua'
+const messages = { ru, en, fr, es, it, uk }
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,
@@ -64,6 +58,7 @@ let translatePlural = () => {};
 // all of this shenanigans are needed because many times translations are needed outside of components(in reducers and redux "connect" functions)
 // but since react-intl functions depends on components context it would be not possible
 
+@injectIntl // inject translation functions through 'intl' prop
 class DummyComponentToExportProps extends React.Component {
 
 	render() { // render hidden placeholder
@@ -106,9 +101,6 @@ class DummyComponentToExportProps extends React.Component {
 	}
 }
 
-// inject translation functions through 'intl' prop (not using decorator)
-DummyComponentToExportProps = injectIntl(DummyComponentToExportProps)
-
 // actual wrapper for application
 class Translator extends React.Component {
 	render() {
@@ -142,7 +134,14 @@ class Translator extends React.Component {
 					messages={messages[languageWithoutRegionCode]}
 				>
 					<div>
+						{/* self explanatory */}
 						<DummyComponentToExportProps />
+						{/*
+							create hidden instance of LocalizedCurrency so data will be fetched and
+							localizedCurrency() would never be undefined
+						*/}
+						<LocalizedCurrency amount={0} hidden />
+						{/* render actual content */}
 						{this.props.children}
 					</div>
 				</IntlProvider>
