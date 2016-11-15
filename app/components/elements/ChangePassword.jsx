@@ -51,7 +51,7 @@ class ChangePassword extends React.Component {
             promise
                 .then(nameError => this.setState({nameError}))
                 .catch(() => this.setState({
-                    nameError: "Account name can't be verified right now due to server failure. Please try again later."
+                    nameError: translate('account_name_cant_be_verified_right_now_due_to_server_failure_please_try_again_later')
                 }));
         } else {
             this.setState({nameError});
@@ -115,6 +115,7 @@ class ChangePassword extends React.Component {
                             })}</p> :
                         <div className="ChangePassword__rules">
                             <hr />
+                            {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
                             <p> <FormattedHTMLMessage id="the_rules_of_APP_NAME" /> </p>
                         <hr />
                         </div>
@@ -202,6 +203,7 @@ import {PublicKey} from 'shared/ecc'
 let newWif = null
 const keyValidate = (values) => ({
     password: ! values.password ? translate('required') :
+        values.password.length < 16 ? translate('password_must_be_characters_or_more', {amount: 16}) :
         PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
         null,
     confirmPassword: ! values.confirmPassword ? translate('required') :

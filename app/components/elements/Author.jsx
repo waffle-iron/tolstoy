@@ -7,6 +7,7 @@ import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import Reputation from 'app/components/elements/Reputation';
+import { translate } from 'app/Translator';
 
 const {string, bool, number} = React.PropTypes
 
@@ -26,15 +27,15 @@ class Author extends React.Component {
         const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
 
-        const author_link = <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
-            <Link to={'/@' + author}><strong>{author}</strong></Link><Reputation value={authorRepLog10} />
+        const author_link = <span className="Author" itemProp="author" itemScope itemType="http://schema.org/Person">
+            <Link to={'/@' + author}><strong>{author}</strong></Link>&nbsp;<Reputation value={authorRepLog10} />
         </span>
 
         if(!username || !(follow || mute))
             return author_link
 
         const dropdown = <div className="Author__dropdown">
-            <Link to={'/@' + author}>Profile</Link> &nbsp;
+            <Link to={'/@' + author}>{translate('profile')}</Link> &nbsp;
             <Follow className="float-right" follower={username} following={author} what="blog"
                     showFollow={follow} showMute={mute} />
         </div>
