@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -14,7 +14,7 @@ const ru = {
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
 	steemit_chat: "Steemit чат",
-	steemit_api_docs: "Steemit API Docs",
+	steemit_api_docs: "Steemit API документация",
 	APP_NAME_chat: APP_NAME + " чат",
 	witnesses: "Делегаты",
 	privacy_policy: "Политика Конфиденциальности",
@@ -251,7 +251,7 @@ const ru = {
 	account_name_is_not_found: 'Имя аккаунта не найдено',
 	unable_to_recover_account_not_change_ownership_recently: 'У нас не получилось восстановить этот аккаунт, он не менял владельца в недавнее время.',
 	password_not_used_in_last_days: 'Этот пароль не использовался в этом аккаунте за последние 30 дней.',
-	request_already_submitted_contact_support: 'Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с t@cyber.fund для получения статуса вашего запроса.',
+	request_already_submitted_contact_support: 'Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с ' + SUPPORT_EMAIL + ' для получения статуса вашего запроса.',
 	recover_account_intro: "Иногда бывает что  ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в " + APP_URL + " возможно только если владелец аккаунта ранее указал '" + APP_NAME + "' в качестве доверенного лица и согласился с Условиями Использования сайта  " + APP_NAME + ".",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Пожалуйста, войдите используя Facebook или Reddit чтобы подтвердить вашу личность',
 	login_with_social_media_to_verify_identity: 'Пожалуйста, зайдите с помощью {show_social_login} чтобы подтвердить вашу личность',
@@ -274,10 +274,10 @@ const ru = {
 	change_password: 'Сменить пароль',
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
-	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
-	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан!",
-	user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
+	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал(а) постов!",
+	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл(а) блог!",
+	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан(а)!",
+	user_hasnt_had_any_replies_yet: "{name} еще не получил(а) ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
 	users_wallet: "кошелек {name}",
@@ -520,6 +520,7 @@ const ru = {
 	this_post_was_hidden_due_to_low_ratings: 'Этот пост был скрыт из-за низкого рейтинга',
 	reblogged_by: 'Поделился',
 	reblog: 'Поделиться',
+  reblogged: "Поделился",
 	updated: 'обновленное',
 	created: 'новое',
 	settings: 'Настройки',
@@ -564,6 +565,24 @@ const ru = {
 	add_image_url: 'Добавьте url вашего изображения',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
+	user_avatar: 'Аватар пользователя',
+	save_avatar: 'Сохранить аватар',
+	wiki: 'Вики',
+	comment_is_nested_5_posts_deep: 'Комментарий слишком глубоко в цепочке. Максимум вложенности - 5',
+	you_may_only_comment_once_every_20_seconds: 'Вы можете комментировать не чаще каждых 20 секунд',
+	looks_like_you_havent_followed_anything_yet: "Похоже что вы еще ни на кого не подписаны",
+	explore_APP_NAME: 'Исследовать ' + APP_NAME,
+	read_the_beginners_guide: 'читать гайд для новичков',
+	savings: 'сбережения',
+	markdown_styling_guide: 'Руководство по markdown',
+	update: 'Обновить',
+  account_name_cant_be_verified_right_now_due_to_server_failure: "Имя аккаунту не может быть подтверждено сейчас из-за ошибки сервера. Пожалуйста, попробуйте позже.",
+	create_account: 'Создать Аккаунт',
+  this_form_requires_javascript_to_be_enabled_in_your_browser: 'Эта форма требует включенного JavaScript в вашем браузере',
+  APP_NAME_rules: 'Правила ' + APP_NAME + 'a',
+  please_verify_your_email_address: 'Пожалуйста, подтвердите ваш имейл',
+  please_verify_your_phone_number: 'Пожалуйста, подтвердите ваш телефонный номер',
+  back: 'Назад',
 }
 
 export { ru }

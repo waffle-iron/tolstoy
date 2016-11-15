@@ -1,4 +1,5 @@
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN } from 'config/client_config';
+
 /**
  * see: app/locales/README.md
  */
@@ -247,7 +248,7 @@ const en = 	{
 	account_name_is_not_found: 'Account name is not found',
 	unable_to_recover_account_not_change_ownership_recently: 'We are unable to recover this account, it has not changed ownership recently.',
 	password_not_used_in_last_days: 'This password was not used on this account in the last 30 days.',
-	request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact t@cyber.fund for the status of your request.',
+	request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact ' + SUPPORT_EMAIL + ' for the status of your request.',
 	recover_account_intro: "From time to time, a Steemian’s owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on " + APP_URL + " if the account owner had perviously listed ‘" + APP_NAME + "’ as their account trustee and complied with " + APP_NAME + "’s Terms of Service.",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Please login with Facebook or Reddit to verify your identity',
 	login_with_social_media_to_verify_identity: 'Please login with {show_social_login} to verify you identity',
@@ -507,7 +508,8 @@ const en = 	{
 	requires_5_or_more_reddit_comment_karma: 'requires 5 or more Reddit comment karma',
 	this_post_was_hidden_due_to_low_ratings: 'This post was hidden due to low ratings',
 	reblogged_by: 'Resteemed by',
-	reblog: "Resteem",
+  reblog: "Resteem",
+	reblogged: "Resteemed",
 	updated: 'updated',
 	created: 'created',
 	settings: 'Settings',
@@ -543,9 +545,27 @@ const en = 	{
 	by_verifying_you_agree_with: 'By verifying your account you agree to the',
 	by_verifying_you_agree_with_privacy_policy: 'Privacy Policy',
 	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'of ' + APP_URL,
-	add_image_url: 'Profile picture url',
+	add_image_url: 'Add image url',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
+	user_avatar: 'user\'s avatar',
+	save_avatar: 'save avatar',
+	wiki: 'Wiki',
+	comment_is_nested_5_posts_deep: 'Comment is nested 5 posts deep, maximum depth is 5',
+	you_may_only_comment_once_every_20_seconds: 'You may only comment once every 20 seconds',
+	looks_like_you_havent_followed_anything_yet: "Looks like you haven't followed anything yet",
+	explore_APP_NAME: 'Explore ' + APP_NAME,
+	read_the_beginners_guide: 'read_the_beginners_guide',
+	savings: 'savings',
+	markdown_styling_guide: 'Markdown Styling Guide',
+	update: 'Update',
+  account_name_cant_be_verified_right_now_due_to_server_failure: "Account name can't be verified right now due to server failure. Please try again later.",
+	create_account: 'Create Account',
+  this_form_requires_javascript_to_be_enabled_in_your_browser: 'This form requires javascript to be enabled in your browser',
+  APP_NAME_rules: APP_NAME + ' Rules',
+  please_verify_your_email_address: 'Please verify your email address',
+  please_verify_your_phone_number: 'Please verify your phone number',
+	back: 'Back,'
 }
 
 export { en }
